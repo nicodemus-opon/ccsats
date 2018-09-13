@@ -3,9 +3,22 @@ import hashlib
 from flask import Flask, render_template, redirect, url_for, request, session
 from functools import wraps
 from main import *
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 app.secret_key = "nico"
+#mysql = MySQL()
+print("initializing database")
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = "'123'"
+app.config['MYSQL_DB'] = 'ccsats'
+app.config['MYSQL_PORT'] = 3360
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+
+mysql = MySQL(app)
+print("database initialized")
+
+#mysql.init_app(app)
 app.debug = True
 
 
@@ -19,11 +32,36 @@ def is_logged_in(f):
 
     return wrap
 
-
 @app.route('/')
 def index():
-    return (render_template('index.html'))
+    return (render_template('index.html')) 
 
+@app.route('/', methods=['POST','GET'])
+def process_login():
+    if request.method == "POST":
+        email = request.form['email']
+        password = request.form['password']
+        print(email)
+        print(password)
+        con = mysql.connect
+        cur = con.cursor()
+        cur.execute("SELECT * FROM users")
+        with con:
+            rows = cur.fetchall()
+            print("===================")
+            print(rows[0])
+            print(rows[1])
+            print("===================")
+            for row in rows:
+                print("===")
+                print(row['usrname'])
+                print(row['passwrd'])
+                print("===")
+                if row['usrname']==email and row['passwrd']==password:
+                    return redirect(url_for('design'))
+                else:
+                    print("invalid creds")
+    return render_template('index.html')
 
 @app.route('/pricing')
 def pricing():
@@ -69,21 +107,26 @@ def topics():
 def register():
     error = None
     if request.method == 'POST':
-        conn = sqlite3.connect('static/login.db')
-        c = conn.cursor()
-        username = request.form['username']
-        print(username)
-        password = request.form['password']
-        email = request.form['email']
-        subscription = request.form['subscription']
-        #############################################
-        fullstring = "'" + str(username) + "'" + "," + "'" + str(password) + "'" + "," + "'" + str(
-            email) + "'" + "," + "'" + str(subscription) + "'"
-        print(fullstring)
-        c.execute("INSERT INTO users VALUES(" + str(fullstring) + ")")
-        conn.commit()
-        conn.close
-        return redirect(url_for('login'))
+        print("get req")
+        emailreg = request.form['emailreg']
+        passwordreg = request.form['passwordreg']
+        print("====register=====")
+        print(emailreg)
+        print(passwordreg)
+        print("====+++++++=====")
+        que='''select * from users;'''
+        quert='''insert into users values("'''+emailreg+'''","'''+passwordreg+'''");'''
+        print(quert)
+        #cur = mysql.connection.cursor()
+        #cur.execute(quert)
+        con = mysql.connect
+        cur = con.cursor()
+        cur.execute(quert)
+        con.commit()
+        print("registered")
+        #rv = cur.fetchall()
+        #print(rv)
+        return (render_template('index.html'))
 
     return render_template('register.html', error=error)
 
@@ -102,7 +145,6 @@ def login():
             app.logger.info("PASSWORD MATCHED")
             session['logged_in'] = True
             session['username'] = username
-
             con = sqlite3.connect('static/login.db')
             with con:
                 cur = con.cursor()
@@ -142,6 +184,19 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+@app.route("/survey/<string:name>")
+def surve(name):
+    name=name
+    return redirect(url_for("survey",name=name))
+
+@app.route("/survey")
+def survey():
+    name="name"
+    return render_template("survey.html",name=name)
+'''
+@app.route('/<string:page_name>/')
+def render_static(page_name):
+    return render_template('%s.html' % page_name)'''
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0', port= 8090)
