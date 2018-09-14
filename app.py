@@ -67,8 +67,15 @@ def process_login():
 def pricing():
     return (render_template('pricing.html'))
 
-@app.route('/design')
+@app.route('/design', methods=['GET', 'POST'])
 def design():
+    if request.method == 'POST':
+        
+        print("gotten some stuff")
+        print(session["title"])
+        print(session["header"])
+        print(session["survey_name"])
+        return("got sometin")
     return (render_template('design.html'))
 
 @app.route('/dashboard', methods=['GET', 'POST'])
@@ -126,7 +133,7 @@ def register():
         print("registered")
         #rv = cur.fetchall()
         #print(rv)
-        return (render_template('index.html'))
+        return (redirect(url_for('index')))
 
     return render_template('register.html', error=error)
 
@@ -186,13 +193,12 @@ def logout():
 
 @app.route("/survey/<string:name>")
 def surve(name):
-    name=name
-    return redirect(url_for("survey",name=name))
+    session['survey']=name
+    return redirect(url_for("survey"))
 
 @app.route("/survey")
 def survey():
-    name="name"
-    return render_template("survey.html",name=name)
+    return render_template("survey.html")
 '''
 @app.route('/<string:page_name>/')
 def render_static(page_name):

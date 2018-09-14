@@ -13,18 +13,18 @@
                     </div>
                     <div class="card-body">
                         <h4 class="card-title">
-                            <form>
+                            <form method="POST" action="">
                                 <div class="form-group">
                                     <label for="exampleFormControlTextarea1">ADD TITLE</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                    <textarea class="form-control" value={{session.title}} name="title" id="exampleFormControlTextarea1" rows="1"></textarea>
                                 </div>
                             </form>
                         </h4>
                         <p class="card-text">
-                            <form>
+                            <form method="POST" action="">
                                 <div class="form-group">
                                     <label for="exampleFormControlTextarea1">ADD Header</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
+                                    <textarea class="form-control" value={{session.header}} name="header" id="exampleFormControlTextarea1" rows="2"></textarea>
                                 </div>
                             </form>
                         </p>
@@ -38,7 +38,7 @@
                                 <a class="dropdown-item" data-toggle="modal" data-target="#simplequestion">Text area</a>
                             </div>
                         </div>
-                        <div class="btn-group">
+                        <!--div class="btn-group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Toggle Drag Mode
                             </button>
@@ -46,8 +46,8 @@
                                 <a class="dropdown-item on">on</a>
                                 <a class="dropdown-item off">off</a>
                             </div>
-                        </div>
-                    <button class="btn btn-primary btn-round" type="button">
+                        </div-->
+                    <button class="btn btn-primary btn-round" type="button" data-toggle="modal" data-target="#save">
 	<i class="now-ui-icons ui-2_save-28"></i> Save and Publish Survey
 </button>
                     </div>
@@ -59,7 +59,7 @@
                                     <div class="alert-icon">
                                         <i class="now-ui-icons ui-2_like"></i>
                                     </div>
-                                    <strong>Well done!</strong> You successfully read this important alert message.
+                                    <strong>Design Survey!</strong> Click on add questions to add sections and Drag to arrange.
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">
                                             <i class="now-ui-icons ui-1_simple-remove text-dark"></i>
@@ -158,6 +158,32 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" id="schoice" class="btn btn-primary">Add to survey</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="save" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Save Survey</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" action="">
+                <div class="modal-body">
+                    
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">SURVEY NAME <small>must not include white spaces</small></label>
+                            <textarea class="form-control" value={{session.survey_name}} name="surveyname" id="surveyname" rows="1"></textarea>
+                        </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" id="sqbutton" class="btn btn-primary" value="Save and Publish Survey">
+                </div>
+            </form>
             </div>
         </div>
     </div>

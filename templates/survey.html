@@ -2,43 +2,24 @@
 
 <body class="login-page sidebar-collapse">
     <div class="page-header clear-filter text-dark" filter-color="orange">
-        <div class="page-header-image" style="background-image:url(static/bg.jpg)"></div>
+        <div class="page-header-image" style="background-image:url(static/bgh3.jpg)"></div>
         <div class="row">
             <div class="col-2">
             </div>
             <div class="col-8" style="padding-top: 20px;">
                 <div class="card ">
                     <div class="card-header mt-2 text-center">
-                        Design Survey
+                        Design Survey{{session.survey}}
                     </div>
                     <div class="card-body">
-                        <h4 class="card-title">
-                            <form>
-                                <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">ADD TITLE</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
-                                </div>
-                            </form>
+                        <h4 class="card-title text-center">
+                            ADD TITLE
                         </h4>
-                        <p class="card-text">
-                            <form>
-                                <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">ADD Header {{name}}</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
-                                </div>
-                            </form>
+                        <p class="card-text text-center">
+                            ADD HEADER
                         </p>
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Add Questions
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#singlechoice">Single choice</a>
-                                <a class="dropdown-item" data-toggle="modal" data-target="#multiplechoice">Multiple choice</a>
-                                <a class="dropdown-item" data-toggle="modal" data-target="#simplequestion">Text area</a>
-                            </div>
-                        </div>
-                        <div class="btn-group">
+
+                        <!--div class="btn-group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Toggle Drag Mode
                             </button>
@@ -46,27 +27,13 @@
                                 <a class="dropdown-item on">on</a>
                                 <a class="dropdown-item off">off</a>
                             </div>
-                        </div>
-                    <button class="btn btn-primary btn-round" type="button">
-	<i class="now-ui-icons ui-2_save-28"></i> Save and Publish Survey
-</button>
+                        </div-->
+                        
                     </div>
                     <div class="wrapper">
                         <ul class="content wrap" id="wrap" style="list-style-type: none;">
 
-                            <div class="alert alert-light text-dark" role="alert">
-                                <div class="container">
-                                    <div class="alert-icon">
-                                        <i class="now-ui-icons ui-2_like"></i>
-                                    </div>
-                                    <strong>Well done!</strong> You successfully read this important alert message.
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">
-                                            <i class="now-ui-icons ui-1_simple-remove text-dark"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                            </div>
+                        <!--html goes herereeee-->
                         </ul>
                     </div>
 
