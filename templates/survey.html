@@ -8,15 +8,15 @@
             </div>
             <div class="col-8" style="padding-top: 20px;">
                 <div class="card ">
-                    <div class="card-header mt-2 text-center">
+                    <!--div class="card-header mt-2 text-center">
                         Design Survey{{session.survey}}
-                    </div>
+                    </div-->
                     <div class="card-body">
                         <h4 class="card-title text-center">
-                            ADD TITLE
+                            {{session.tito}}
                         </h4>
                         <p class="card-text text-center">
-                            ADD HEADER
+                            {{session.heda}}
                         </p>
 
                         <!--div class="btn-group">
@@ -28,12 +28,12 @@
                                 <a class="dropdown-item off">off</a>
                             </div>
                         </div-->
-                        
+
                     </div>
                     <div class="wrapper">
                         <ul class="content wrap" id="wrap" style="list-style-type: none;">
-
-                        <!--html goes herereeee-->
+                            {{session.htmlo | safe}}
+                            <!--html goes herereeee-->
                         </ul>
                     </div>
 
@@ -143,7 +143,7 @@
                 'box-shadow': '1px 1px 2px 0 #f96332'
             }
         });
-        $('.seq').click(function() {
+        $('.seq').click(function () {
             console.log($(this).attr("id")); //IT WORKS!
 
         });
@@ -152,15 +152,15 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-        $.fn.changeElementType = function(newType) {
+        $.fn.changeElementType = function (newType) {
             var newElements,
                 attrs,
                 newElement;
 
-            this.each(function() {
+            this.each(function () {
                 attrs = {};
 
-                $.each(this.attributes, function() {
+                $.each(this.attributes, function () {
                     attrs[this.nodeName] = this.nodeValue;
                 });
 
@@ -177,18 +177,18 @@
 
             return $(newElements);
         };
-        $(".off").click(function() {
+        $(".off").click(function () {
             $(".content").attr("class", "content");
             $(".content").attr("id", "noid");
-            $($('.wrapper').find('ul').get().reverse()).each(function() {
+            $($('.wrapper').find('ul').get().reverse()).each(function () {
                 $(this).replaceWith($('<ol>' + $(this).html() + '</ol>'))
             })
             //$( "body" ).off("dragstart");
             console.log("drag offf");
         });
-        $(".on").click(function() {
+        $(".on").click(function () {
 
-            $($('.wrapper').find('ol').get().reverse()).each(function() {
+            $($('.wrapper').find('ol').get().reverse()).each(function () {
                 $(this).replaceWith($('<ul class="wrap content" id="wrap">' + $(this).html() + '</ul>'))
             })
             //$(".content").addClass("wrap")
@@ -196,10 +196,16 @@
             console.log("drag on");
         });
         $(document).ready(
-            function() {
+            function () {
+                $(".content").attr("class", "content");
+                $(".content").attr("id", "noid");
+                $($('.wrapper').find('ul').get().reverse()).each(function () {
+                    $(this).replaceWith($('<ol>' + $(this).html() + '</ol>'))
+                })
                 console.log("uiuiui");
+                //$(".content").append("")
             })
-        $('#sqbutton').on('click', function() {
+        $('#sqbutton').on('click', function () {
             var txtValue = $('#sqtext').val();
             console.log(txtValue);
             $(".content").append(`<li><div class="alert alert-light text-dark" role="alert">
@@ -221,7 +227,7 @@
                             </div>
                         </div></li>`);
         });
-        $('#schoice').on('click', function() {
+        $('#schoice').on('click', function () {
             var txtValue = $('#scquestion').val();
             var choices = ""
             var lines = $('#scchoices').val().split('\n');
@@ -251,7 +257,7 @@
                             </div>
                         </div></li>`);
         });
-        $('#mcbutton').on('click', function() {
+        $('#mcbutton').on('click', function () {
             var txtValue = $('#mcquestion').val();
             var choices = ""
             var lines = $('#mcchoices').val().split('\n');

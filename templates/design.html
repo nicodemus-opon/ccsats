@@ -16,7 +16,7 @@
                             <form method="POST" action="">
                                 <div class="form-group">
                                     <label for="exampleFormControlTextarea1">ADD TITLE</label>
-                                    <textarea class="form-control" value={{session.title}} name="title" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                    <textarea class="form-control" id="titlex" name="title" id="exampleFormControlTextarea1" rows="1"></textarea>
                                 </div>
                             </form>
                         </h4>
@@ -24,12 +24,13 @@
                             <form method="POST" action="">
                                 <div class="form-group">
                                     <label for="exampleFormControlTextarea1">ADD Header</label>
-                                    <textarea class="form-control" value={{session.header}} name="header" id="exampleFormControlTextarea1" rows="2"></textarea>
+                                    <textarea class="form-control" id="headerx" name="header" id="exampleFormControlTextarea1" rows="2"></textarea>
                                 </div>
                             </form>
                         </p>
                         <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
                                 Add Questions
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -47,14 +48,14 @@
                                 <a class="dropdown-item off">off</a>
                             </div>
                         </div-->
-                    <button class="btn btn-primary btn-round" type="button" data-toggle="modal" data-target="#save">
-	<i class="now-ui-icons ui-2_save-28"></i> Save and Publish Survey
-</button>
+                        <button class="btn btn-primary btn-round" type="button" data-toggle="modal" data-target="#save">
+                            <i class="now-ui-icons ui-2_save-28"></i> Save and Publish Survey
+                        </button>
                     </div>
                     <div class="wrapper">
                         <ul class="content wrap" id="wrap" style="list-style-type: none;">
 
-                            <div class="alert alert-light text-dark" role="alert">
+                            <!--div class="alert alert-light text-dark" role="alert">
                                 <div class="container">
                                     <div class="alert-icon">
                                         <i class="now-ui-icons ui-2_like"></i>
@@ -66,7 +67,7 @@
                                         </span>
                                     </button>
                                 </div>
-                            </div>
+                            </div-->
                         </ul>
                     </div>
 
@@ -171,19 +172,21 @@
                     </button>
                 </div>
                 <form method="POST" action="">
-                <div class="modal-body">
-                    
+                    <div class="modal-body">
+
                         <div class="form-group">
-                            <label for="exampleFormControlTextarea1">SURVEY NAME <small>must not include white spaces</small></label>
-                            <textarea class="form-control" value={{session.survey_name}} name="surveyname" id="surveyname" rows="1"></textarea>
+                            <label for="exampleFormControlTextarea1">SURVEY NAME
+                                <small>must not contain white spaces</small>
+                            </label>
+                            <textarea class="form-control" id="namex" name="surveyname" id="surveyname" rows="1"></textarea>
                         </div>
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <input type="submit" id="sqbutton" class="btn btn-primary" value="Save and Publish Survey">
-                </div>
-            </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary closex" data-dismiss="modal">Close</button>
+                        <button type="button" id="savebutton" class="btn btn-primary">Save and Publish Survey</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -202,7 +205,7 @@
                 'box-shadow': '1px 1px 2px 0 #f96332'
             }
         });
-        $('.seq').click(function() {
+        $('.seq').click(function () {
             console.log($(this).attr("id")); //IT WORKS!
 
         });
@@ -211,15 +214,15 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-        $.fn.changeElementType = function(newType) {
+        $.fn.changeElementType = function (newType) {
             var newElements,
                 attrs,
                 newElement;
 
-            this.each(function() {
+            this.each(function () {
                 attrs = {};
 
-                $.each(this.attributes, function() {
+                $.each(this.attributes, function () {
                     attrs[this.nodeName] = this.nodeValue;
                 });
 
@@ -236,29 +239,47 @@
 
             return $(newElements);
         };
-        $(".off").click(function() {
+        $(".off").click(function () {
             $(".content").attr("class", "content");
             $(".content").attr("id", "noid");
-            $($('.wrapper').find('ul').get().reverse()).each(function() {
+            $($('.wrapper').find('ul').get().reverse()).each(function () {
                 $(this).replaceWith($('<ol>' + $(this).html() + '</ol>'))
             })
             //$( "body" ).off("dragstart");
             console.log("drag offf");
         });
-        $(".on").click(function() {
+        $(".on").click(function () {
 
-            $($('.wrapper').find('ol').get().reverse()).each(function() {
+            $($('.wrapper').find('ol').get().reverse()).each(function () {
                 $(this).replaceWith($('<ul class="wrap content" id="wrap">' + $(this).html() + '</ul>'))
             })
             //$(".content").addClass("wrap")
             //$(".content").attr("id", "wrap");
             console.log("drag on");
         });
+        $("#savebutton").click(function () {
+            
+            var valuex = $('#titlex').val() + "*" + $('#headerx').val() + "*" + $('#namex').val() + "*" + $('.content').html() + "*" + $('.alert').length;
+            console.log(valuex);
+            $(".closex").click();
+            $.ajax({
+                type: 'POST',
+                url: "{{ url_for('parse_data') }}",
+                contentType: 'application/json;charset=UTF-8',
+                //data : {'data':valuex},
+                data: JSON.stringify(valuex),
+                //contentType: 'application/json',
+                success: function (data) {
+                    // do something with the received data
+                }
+            });
+            console.log("drag on");
+        });
         $(document).ready(
-            function() {
+            function () {
                 console.log("uiuiui");
             })
-        $('#sqbutton').on('click', function() {
+        $('#sqbutton').on('click', function () {
             var txtValue = $('#sqtext').val();
             console.log(txtValue);
             $(".content").append(`<li><div class="alert alert-light text-dark" role="alert">
@@ -280,7 +301,7 @@
                             </div>
                         </div></li>`);
         });
-        $('#schoice').on('click', function() {
+        $('#schoice').on('click', function () {
             var txtValue = $('#scquestion').val();
             var choices = ""
             var lines = $('#scchoices').val().split('\n');
@@ -310,7 +331,7 @@
                             </div>
                         </div></li>`);
         });
-        $('#mcbutton').on('click', function() {
+        $('#mcbutton').on('click', function () {
             var txtValue = $('#mcquestion').val();
             var choices = ""
             var lines = $('#mcchoices').val().split('\n');

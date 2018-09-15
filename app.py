@@ -28,7 +28,7 @@ def is_logged_in(f):
         if 'logged_in' in session:
             return f(*args, **kwargs)
         else:
-            return redirect(url_for('login'))
+            return redirect(url_for('index'))
 
     return wrap
 
@@ -58,7 +58,9 @@ def process_login():
                 print(row['passwrd'])
                 print("===")
                 if row['usrname']==email and row['passwrd']==password:
-                    return redirect(url_for('design'))
+                    session["username"]=row['usrname']
+                    session['logged_in']=True
+                    return redirect(url_for('dashboard'))
                 else:
                     print("invalid creds")
     return render_template('index.html')
@@ -68,13 +70,10 @@ def pricing():
     return (render_template('pricing.html'))
 
 @app.route('/design', methods=['GET', 'POST'])
+@is_logged_in
 def design():
     if request.method == 'POST':
-        
         print("gotten some stuff")
-        print(session["title"])
-        print(session["header"])
-        print(session["survey_name"])
         return("got sometin")
     return (render_template('design.html'))
 
@@ -82,26 +81,8 @@ def design():
 @is_logged_in
 def dashboard():
     if request.method == 'POST':
-        session["to_search"] = request.form["to_search"]
-        print("gotten some stuff")
-        session["y"], session["x"] = main(session['to_search'])
-        session["mentions"] = f_mentions()
-        session["id_comment"] = f_id()
-        session["comment_x"] = f_comments()
-        session["time_x"] = f_time()
-        session["date_x"] = f_date()
-        session["polarity_x"] = f_polarity()
-        session["colors"] = f_colors()
         return (render_template('dashboard.html'))
     else:
-        session["y"], session["x"] = main(session['username'])
-        session["mentions"] = f_mentions()
-        session["id_comment"] = f_id()
-        session["comment_x"] = f_comments()
-        session["time_x"] = f_time()
-        session["date_x"] = f_date()
-        session["polarity_x"] = f_polarity()
-        session["colors"] = f_colors()
         return (render_template('dashboard.html'))
 
 
@@ -136,6 +117,57 @@ def register():
         return (redirect(url_for('index')))
 
     return render_template('register.html', error=error)
+
+@app.route('/parse_data', methods=['GET', 'POST'])
+def parse_data():
+    datax=None
+    if request.method == "POST":
+        print("got post")
+        datax=request.json
+        dat_array=datax.split("*")
+        title=dat_array[0]
+        header=dat_array[1]
+        survey_name=dat_array[2]
+        ht=dat_array[3]
+        lent=dat_array[4]
+        ht=ht.replace("  ","")
+        ht=ht.replace('"',"|")
+        ht=ht.replace("'","|")
+        session["title"]=title
+        session["header"]=header
+        session["survey_name"]=survey_name
+        session["ht"]=ht
+        session["lent"]=lent
+        print(session["title"])
+        print(session["header"])
+        print(session["survey_name"])
+        print(session["ht"])
+        print(session["lent"])
+        length=int(session["lent"])
+        init_string="create table "+ str(session["survey_name"]) +"("
+        for x in range(length):
+            num=x+1
+            textpend="q"+str(num)+" text ,"
+            init_string+=textpend
+        init_string=init_string[:-1]
+        init_string+=");"
+        print(init_string)
+        con = mysql.connect
+        cur = con.cursor()
+        cur.execute(init_string)
+        con.commit()
+        print("added table")
+        quert='''insert into survey values("'''+session["survey_name"]+'''","'''+session["username"]+'''","''' + session["ht"]+'''","''' + session["title"]+'''","''' + session["header"]+'''");'''
+        print(quert)
+        #cur = mysql.connection.cursor()
+        #cur.execute(quert)
+        con = mysql.connect
+        cur = con.cursor()
+        cur.execute(quert)
+        con.commit()
+        print("registered survey")
+        redstring="/survey/"+session["survey_name"]
+        return(redirect(redstring))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -193,7 +225,24 @@ def logout():
 
 @app.route("/survey/<string:name>")
 def surve(name):
-    session['survey']=name
+    session['surveyname']=name
+    select_query="select * from survey where nme='"+str(name)+"' ;"
+    con = mysql.connect
+    cur = con.cursor()
+    cur.execute(select_query)
+    with con:
+        rows = cur.fetchall()
+        for row in rows:
+            session['nme']=row['nme']
+            session['tito']=str(row['title'])
+            xc=row['html']
+            xc=xc.replace("|",'"')
+            xc=xc.replace("wrap",'')
+            xc=xc.replace("<ul",'<li')
+            xc=xc.replace("</ul",'</li')
+            xc=xc.replace('<i class="now-ui-icons ui-1_simple-remove text-dark"></i>',"")
+            session['heda']=row['header']
+            session['htmlo']=xc
     return redirect(url_for("survey"))
 
 @app.route("/survey")
