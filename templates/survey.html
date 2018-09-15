@@ -31,15 +31,19 @@
 
                     </div>
                     <div class="wrapper">
-                        <ul class="content wrap" id="wrap" style="list-style-type: none;">
-                            {{session.htmlo | safe}}
-                            <!--html goes herereeee-->
-                        </ul>
+                        <form>
+                            <ul class="content wrap" id="wrap" style="list-style-type: none;">
+                                {{session.htmlo | safe}}
+                                <!--html goes herereeee-->
+                            </ul>
+                        </form>
                     </div>
 
 
-                    <div class="card-footer text-muted mb-2">
-
+                    <div class="card-footer text-muted2 mb-2" style="padding-left:20px;">
+                        <button class="btn btn-primary subo btn-round">
+                            <i class="now-ui-icons ui-2_save-28"></i> Submit Survey
+                        </button>
                     </div>
                 </div>
             </div>
@@ -47,87 +51,7 @@
             </div>
         </div>
     </div>
-    <!--simple question-->
-    <div class="modal fade" id="simplequestion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Simple Text field</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea1">ADD QUESTION</label>
-                            <textarea class="form-control" id="sqtext" rows="1"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="sqbutton" class="btn btn-primary">Add to survey</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--multiple choice-->
-    <div class="modal fade" id="multiplechoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Multiple Choice Questions</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea1">ADD QUESTION</label>
-                            <textarea class="form-control" id="mcquestion" rows="1"></textarea>
-                            <br>
-                            <label for="exampleFormControlTextarea1">add choices line by line</label>
-                            <textarea class="form-control" id="mcchoices" rows="3"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="mcbutton" class="btn btn-primary">Add to survey</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--Single choice-->
-    <div class="modal fade" id="singlechoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Single Choice Question</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea1">ADD QUESTION</label>
-                            <textarea class="form-control" id="scquestion" rows="1"></textarea>
-                            <br>
-                            <label for="exampleFormControlTextarea1">add choices line by line</label>
-                            <textarea class="form-control" id="scchoices" rows="3"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="schoice" class="btn btn-primary">Add to survey</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
@@ -177,6 +101,25 @@
 
             return $(newElements);
         };
+        $('.subo').click(function () {
+            var respo = [];
+            console.log("twende kazi"); //IT WORKS!
+            $('.form-group').each(function (index) {
+                if ($(this).children('textarea').length > 0) {
+                    //text area
+                    respo.push($(this).children('.form-control').val());
+                }
+                if ($(this).children('form-check-input').length > 0) {
+                    //multiple choice
+                    var multi=""
+                    $('.form-group input:checkbox').each(function () {
+                        var che = (this.checked ? $(this).val() : "");
+                        multi+=che+"-"
+                    });
+                    respo.push(multi)
+                }
+            });
+        });
         $(".off").click(function () {
             $(".content").attr("class", "content");
             $(".content").attr("id", "noid");
