@@ -101,6 +101,18 @@
 
             return $(newElements);
         };
+        $(".form-check-label").click(function () {
+            console.log("clicked");
+            if($(this).children('input').attr("checked")){
+                $(this).children('input').removeAttr("checked");
+                console.log("checked");
+            }else{
+                $(this).children('input').attr("checked","true");
+                console.log("unchecked");
+            }
+
+            
+        });
         $('.subo').click(function () {
             var respo = [];
             console.log("twende kazi"); //IT WORKS!
@@ -109,16 +121,28 @@
                     //text area
                     respo.push($(this).children('.form-control').val());
                 }
-                if ($(this).children('form-check-input').length > 0) {
+                if ($(this).children('.form-check').length > 0) {
                     //multiple choice
-                    var multi=""
-                    $('.form-group input:checkbox').each(function () {
-                        var che = (this.checked ? $(this).val() : "");
-                        multi+=che+"-"
+                    var multi = ""
+                    console.log("multichoice found")
+                    $('.form-check').each(function () {
+                        if ($('input').attr("checked")) {
+                            console.log("got input");
+                            var che = $(this).text();
+                            che = che.strip();
+                            multi += che + "-";
+                        }
+                        //var che = (this.checked ? $(this).val() : "");
+                        //multi+=che+"-"
                     });
-                    respo.push(multi)
+                    respo.push(multi);
+                }
+                if ($(this).children('#exampleFormControlSelect1').length > 0) {
+                    //text area
+                    respo.push($('#exampleFormControlSelect1').find('option:selected').text());
                 }
             });
+            console.log(respo);
         });
         $(".off").click(function () {
             $(".content").attr("class", "content");
