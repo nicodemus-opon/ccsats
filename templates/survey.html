@@ -1,25 +1,31 @@
 {% extends 'layout.html' %} {% block body%}
+<style>
+    .lookalive {
 
-<body class="login-page sidebar-collapse">
-    <div class="page-header clear-filter text-dark" filter-color="orange">
-        <div class="page-header-image" style="background-image:url(static/bgh3.jpg)"></div>
-        <div class="row">
-            <div class="col-2">
-            </div>
-            <div class="col-8" style="padding-top: 20px;">
-                <div class="card ">
-                    <!--div class="card-header mt-2 text-center">
+        overflow: scroll;
+    }
+</style>
+
+<!--body class="login-page sidebar-collapse"-->
+<div class="page-headerx clear-filter text-dark" style="background-image:url(static/assets/img/bgk.jpg);background-position: center;background-size: cover;" filter-color="grey">
+        <div class="page-header-image" style="background-image:url()"></div>
+    <div class="row">
+        <div class="col-2">
+        </div>
+        <div class="col-8" style="padding-top: 20px;">
+            <div class="card">
+                <!--div class="card-header mt-2 text-center">
                         Design Survey{{session.survey}}
                     </div-->
-                    <div class="card-body">
-                        <h4 class="card-title text-center">
-                            {{session.tito}}
-                        </h4>
-                        <p class="card-text text-center">
-                            {{session.heda}}
-                        </p>
+                <div class="card-body">
+                    <h4 class="card-title text-center">
+                        {{session.tito}}
+                    </h4>
+                    <p class="card-text text-center">
+                        {{session.heda}}
+                    </p>
 
-                        <!--div class="btn-group">
+                    <!--div class="btn-group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Toggle Drag Mode
                             </button>
@@ -29,153 +35,177 @@
                             </div>
                         </div-->
 
-                    </div>
-                    <div class="wrapper">
-                        <form>
-                            <ul class="content wrap" id="wrap" style="list-style-type: none;">
-                                {{session.htmlo | safe}}
-                                <!--html goes herereeee-->
-                            </ul>
-                        </form>
-                    </div>
+                </div>
+                <!--div class="wrapper"-->
+                
+                    <ul class="content wrapv" id="wrapv" style="list-style-type: none;">
+                        {{session.htmlo | safe}}
+                        <!--html goes herereeee-->
+                    </ul>
+                
+                <!--/div-->
 
 
-                    <div class="card-footer text-muted2 mb-2" style="padding-left:20px;">
-                        <button class="btn btn-primary subo btn-round">
-                            <i class="now-ui-icons ui-2_save-28"></i> Submit Survey
-                        </button>
-                    </div>
+                <div class="card-footer text-muted2 mb-2" style="padding-left:20px;">
+                    <button class="btn btn-primary subo btn-round">
+                        <i class="now-ui-icons ui-2_save-28"></i> Submit Survey
+                    </button>
                 </div>
             </div>
-            <div class="col-2">
-            </div>
+        </div>
+        <div class="col-2">
         </div>
     </div>
+</div>
 
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-    <script src="static/assets/js/plugins/drag-sort.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        $('#wrap').dragSort({
-            replaceStyle: {
-                'background-color': '#f96332',
-                'border': '1px dashed #ddd'
-            },
-            dragStyle: {
-                'position': 'fixed',
-                'box-shadow': '1px 1px 2px 0 #f96332'
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script src="static/assets/js/plugins/drag-sort.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $('#wrap').dragSort({
+        replaceStyle: {
+            'background-color': '#f96332',
+            'border': '1px dashed #ddd'
+        },
+        dragStyle: {
+            'position': 'fixed',
+            'box-shadow': '1px 1px 2px 0 #f96332'
+        }
+    });
+    $('.seq').click(function () {
+        console.log($(this).attr("id")); //IT WORKS!
+
+    });
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $.fn.changeElementType = function (newType) {
+        var newElements,
+            attrs,
+            newElement;
+
+        this.each(function () {
+            attrs = {};
+
+            $.each(this.attributes, function () {
+                attrs[this.nodeName] = this.nodeValue;
+            });
+
+            newElement = $("<" + newType + "/>", attrs).append($(this).contents());
+
+            $(this).replaceWith(newElement);
+
+            if (!newElements) {
+                newElements = newElement;
+            } else {
+                $.merge(newElements, newElement);
             }
         });
-        $('.seq').click(function () {
-            console.log($(this).attr("id")); //IT WORKS!
 
+        return $(newElements);
+    };
+
+    $(function () {
+
+        $('input[type="checkbox"]').bind('change', function (v) {
+            console.log("clickedx");
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass('active');
+                console.log("active");
+            } else {
+                $(this).parent().removeClass('active');
+                console.log("deactive");
+            }
         });
 
-    </script>
+    });
+    $("div").click(function (e) {
+        e.stopPropagation();
+    });
+    $("inpuht").click(function (e) {
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script>
-        $.fn.changeElementType = function (newType) {
-            var newElements,
-                attrs,
-                newElement;
+        //console.log("clicked");
+        if ($(this).children('input').attr("checked")) {
+            $(this).children('input').removeAttr("checked");
+            console.log("checked");
+        } else {
+            $(this).children('input').attr("checked", "true");
+            console.log("unchecked");
+        }
+        e.stopPropagation();
 
-            this.each(function () {
-                attrs = {};
+    });
+    $('.subo').click(function () {
+        var respo = [];
+        console.log("twende kazi"); //IT WORKS!
+        $('.form-group').each(function (index) {
+            if ($(this).children('textarea').length > 0) {
+                //text area
+                respo.push($(this).children('.form-control').val());
+            }
+            if ($(this).children('.form-check').length > 0) {
+                //multiple choice
+                var multi = ""
+                console.log("multichoice found")
 
-                $.each(this.attributes, function () {
-                    attrs[this.nodeName] = this.nodeValue;
+                $(this).children('.form-check').each(function () {
+                    //console.log($(this).val());
+                    if ($(this).children(".active")) {
+                        console.log("got input");
+                        var che = $(this).children(".active").text();
+                        che = che.trim();
+                        multi += che + "-";
+                    }
+                    //var che = (this.checked ? $(this).val() : "");
+                    //multi+=che+"-"
                 });
-
-                newElement = $("<" + newType + "/>", attrs).append($(this).contents());
-
-                $(this).replaceWith(newElement);
-
-                if (!newElements) {
-                    newElements = newElement;
-                } else {
-                    $.merge(newElements, newElement);
-                }
-            });
-
-            return $(newElements);
-        };
-        $(".form-check-label").click(function () {
-            console.log("clicked");
-            if($(this).children('input').attr("checked")){
-                $(this).children('input').removeAttr("checked");
-                console.log("checked");
-            }else{
-                $(this).children('input').attr("checked","true");
-                console.log("unchecked");
+                respo.push(multi);
             }
+            if ($(this).children('#exampleFormControlSelect1').length > 0) {
+                //text area
+                respo.push($(this).children('#exampleFormControlSelect1').find('option:selected').text());
+            }
+        });
+        console.log(respo);
+    });
 
-            
-        });
-        $('.subo').click(function () {
-            var respo = [];
-            console.log("twende kazi"); //IT WORKS!
-            $('.form-group').each(function (index) {
-                if ($(this).children('textarea').length > 0) {
-                    //text area
-                    respo.push($(this).children('.form-control').val());
-                }
-                if ($(this).children('.form-check').length > 0) {
-                    //multiple choice
-                    var multi = ""
-                    console.log("multichoice found")
-                    $('.form-check').each(function () {
-                        if ($('input').attr("checked")) {
-                            console.log("got input");
-                            var che = $(this).text();
-                            che = che.strip();
-                            multi += che + "-";
-                        }
-                        //var che = (this.checked ? $(this).val() : "");
-                        //multi+=che+"-"
-                    });
-                    respo.push(multi);
-                }
-                if ($(this).children('#exampleFormControlSelect1').length > 0) {
-                    //text area
-                    respo.push($('#exampleFormControlSelect1').find('option:selected').text());
-                }
-            });
-            console.log(respo);
-        });
-        $(".off").click(function () {
+    $(".off").click(function () {
+        $(".content").attr("class", "content");
+        $(".content").attr("id", "noid");
+        $($('.wrapper').find('ul').get().reverse()).each(function () {
+            $(this).replaceWith($('<ol>' + $(this).html() + '</ol>'))
+        })
+        //$( "body" ).off("dragstart");
+        console.log("drag offf");
+    });
+    $(".on").click(function () {
+
+        $($('.wrapper').find('ol').get().reverse()).each(function () {
+            $(this).replaceWith($('<ul class="wrap content" id="wrap">' + $(this).html() + '</ul>'))
+        })
+        //$(".content").addClass("wrap")
+        //$(".content").attr("id", "wrap");
+        console.log("drag on");
+    });
+    $(document).ready(
+        function () {
             $(".content").attr("class", "content");
             $(".content").attr("id", "noid");
             $($('.wrapper').find('ul').get().reverse()).each(function () {
                 $(this).replaceWith($('<ol>' + $(this).html() + '</ol>'))
             })
-            //$( "body" ).off("dragstart");
-            console.log("drag offf");
-        });
-        $(".on").click(function () {
-
-            $($('.wrapper').find('ol').get().reverse()).each(function () {
-                $(this).replaceWith($('<ul class="wrap content" id="wrap">' + $(this).html() + '</ul>'))
-            })
-            //$(".content").addClass("wrap")
-            //$(".content").attr("id", "wrap");
-            console.log("drag on");
-        });
-        $(document).ready(
-            function () {
-                $(".content").attr("class", "content");
-                $(".content").attr("id", "noid");
-                $($('.wrapper').find('ul').get().reverse()).each(function () {
-                    $(this).replaceWith($('<ol>' + $(this).html() + '</ol>'))
-                })
-                console.log("uiuiui");
-                //$(".content").append("")
-            })
-        $('#sqbutton').on('click', function () {
-            var txtValue = $('#sqtext').val();
-            console.log(txtValue);
-            $(".content").append(`<li><div class="alert alert-light text-dark" role="alert">
+            console.log("uiuiui");
+            //$(".content").append("")
+        })
+    $('#sqbutton').on('click', function () {
+        var txtValue = $('#sqtext').val();
+        console.log(txtValue);
+        $(".content").append(`<li><div class="alert alert-light text-dark" role="alert">
 
                             <div class="containerx">
                                 <form>
@@ -193,17 +223,17 @@
                                 </button>     
                             </div>
                         </div></li>`);
-        });
-        $('#schoice').on('click', function () {
-            var txtValue = $('#scquestion').val();
-            var choices = ""
-            var lines = $('#scchoices').val().split('\n');
-            for (var i = 0; i < lines.length; i++) {
-                choices += "<option>" + lines[i] + "</option>"
-            }
+    });
+    $('#schoice').on('click', function () {
+        var txtValue = $('#scquestion').val();
+        var choices = ""
+        var lines = $('#scchoices').val().split('\n');
+        for (var i = 0; i < lines.length; i++) {
+            choices += "<option>" + lines[i] + "</option>"
+        }
 
-            console.log(txtValue);
-            $(".content").append(`<li><div class="alert alert-light text-dark" role="alert">
+        console.log(txtValue);
+        $(".content").append(`<li><div class="alert alert-light text-dark" role="alert">
 
                             <div class="containerx">
                                 <form>
@@ -212,7 +242,6 @@
                             <select class="form-control" id="exampleFormControlSelect1">
       ` + choices + `
     </select>
-
                         </div>
 
                     </form>
@@ -223,13 +252,13 @@
                                 </button>     
                             </div>
                         </div></li>`);
-        });
-        $('#mcbutton').on('click', function () {
-            var txtValue = $('#mcquestion').val();
-            var choices = ""
-            var lines = $('#mcchoices').val().split('\n');
-            for (var i = 0; i < lines.length; i++) {
-                choices += `<div class="form-check">
+    });
+    $('#mcbutton').on('click', function () {
+        var txtValue = $('#mcquestion').val();
+        var choices = ""
+        var lines = $('#mcchoices').val().split('\n');
+        for (var i = 0; i < lines.length; i++) {
+            choices += `<div class="form-check">
     <label class="form-check-label">
         <input class="form-check-input" type="checkbox" value="">
         ` + lines[i] + `
@@ -238,10 +267,10 @@
         </span>
     </label>
 </div>`
-            }
+        }
 
-            console.log(txtValue);
-            $(".content").append(`<li><div class="alert alert-light text-dark" role="alert">
+        console.log(txtValue);
+        $(".content").append(`<li><div class="alert alert-light text-dark" role="alert">
 
                             <div class="containerx">
                                 <form>
@@ -261,10 +290,10 @@
                                 </button>     
                             </div>
                         </div></li>`);
-        });
+    });
 
-    </script>
+</script>
 
-</body>
+<!--/body-->
 
 {%endblock%}
