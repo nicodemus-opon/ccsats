@@ -169,6 +169,25 @@ def parse_data():
         redstring="/survey/"+session["survey_name"]
         return(redirect(redstring))
 
+@app.route('/table', methods=['GET', 'POST'])
+def table():
+    session['dat']=[]
+    session['cols']=[]
+    con = mysql.connect
+    cur = con.cursor()
+    cur.execute("SELECT * FROM "+str(session["surveyname"]))
+    list_of_values=[]
+    list_of_cols=[]
+    with con:
+        rows = cur.fetchall()
+        for row in rows:
+            list_of_values.append(list(row.values()))
+
+    session["mentions"]=list_of_values
+    session["mentionsx"]=len(list_of_values)
+    session["mentionsxy"]=len(list_of_values[0])
+    print(session["mentions"])
+    return render_template("table.html")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -245,13 +264,35 @@ def surve(name):
             session['htmlo']=xc
     return redirect(url_for("survey"))
 
-@app.route("/survey")
+@app.route("/survey", methods=['GET', 'POST'])
 def survey():
+    if request.method == 'POST':
+        datax=request.json
+        print(datax)
+        print(datax[1])
+        qstring=""
+        for x in datax:
+            qstring+="'"+x+"',"
+        qstring=qstring[:-1]
+        print(qstring)
+        query="insert into "+str(session['surveyname'])+" values("+qstring+");"
+        print(query)
+        con = mysql.connect
+        cur = con.cursor()
+        cur.execute(query)
+        con.commit()
+        print("complete")
     return render_template("survey.html")
 '''
 @app.route('/<string:page_name>/')
 def render_static(page_name):
     return render_template('%s.html' % page_name)'''
 
+@app.route("/dashboard/<string:name>")
+def handle_dash(name):
+    if name=="table":
+        return redirect(url_for("table"))
+
+    
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0', port= 8090)
