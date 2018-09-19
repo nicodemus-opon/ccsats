@@ -1,6 +1,8 @@
 import sqlite3
 import hashlib
-from flask import Flask, render_template, redirect, url_for, request, session
+import csv
+import random
+from flask import Flask, render_template, redirect, url_for, request, session, send_from_directory
 from functools import wraps
 from main import *
 from flask_mysqldb import MySQL
@@ -183,7 +185,13 @@ def table():
         for row in rows:
             list_of_values.append(list(row.values()))
 
+    for z in range(len(list_of_values[0])):
+        e=z+1
+        d="que-"+str(e)
+        list_of_cols.append(d)
+
     session["mentions"]=list_of_values
+    session["cols"]=list_of_cols
     session["mentionsx"]=len(list_of_values)
     session["mentionsxy"]=len(list_of_values[0])
     print(session["mentions"])
@@ -241,6 +249,12 @@ def check_password(hashed_password, user_password):
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+
+@app.route('/download/<path:filename>', methods=['GET', 'POST'])
+def download(filename):
+    return send_from_directory(directory='static', filename=filename)
+
 
 @app.route("/survey/<string:name>")
 def surve(name):

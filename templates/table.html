@@ -128,25 +128,19 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
-                    <h4 class="card-title"> </h4>
+                    <h6 class="card-title"><button class="btn btn-primary subox btn-round">
+                      <i class="now-ui-icons ui-2_save-28"></i> Download Results
+                  </button> </h6>
                   </div>
                   <div class="card-body">
-                    
                     <div class="table-responsive">
                         <table class="table">
                           <thead class=" text-primary">
+                                {% for i in range(session["mentionsxy"]) -%}
                             <th>
-                              Name
+                                    <b>{{session["cols"][i]}}</b>
                             </th>
-                            <th>
-                              Country
-                            </th>
-                            <th>
-                              City
-                            </th>
-                            <th class="text-right">
-                              Salary
-                            </th>
+                            {%- endfor %}
                           </thead>
                           <tbody>
                             {% for i in range(session["mentionsx"]) -%}
@@ -166,7 +160,22 @@
                 </div>
               </div>
               
-          
+      <script>
+        $('.subox').click(function () {
+          var respo ="{{session.surveyname}}"
+        $.ajax({
+                type: 'POST',
+                url: "{{ url_for('table') }}",
+                contentType: 'application/json;charset=UTF-8',
+                //data : {'data':valuex},
+                data: JSON.stringify(respo),
+                //contentType: 'application/json',
+                success: function (data) {
+                    // do something with the received data
+                }
+            });
+    });
+      </script>    
       <!--   Core JS Files   -->
       <script src="static/assets/js/core/jquery.min.js"></script>
       <script src="static/assets/js/core/popper.min.js"></script>
