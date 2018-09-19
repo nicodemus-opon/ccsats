@@ -171,8 +171,28 @@ def parse_data():
         redstring="/survey/"+session["survey_name"]
         return(redirect(redstring))
 
+def download_csv(name):
+    mystring=name
+    hash_object = hashlib.md5(mystring.encode())
+    filex="static/downloads/"+str(hash_object.hexdigest())+".csv"
+    xc=str(hash_object.hexdigest())+".csv"
+    session["filex"]=filex
+    with open(filex, "w") as f:
+        writer = csv.writer(f)
+        writer.writerows(session["mentions"])
+    return(xc)
+
+
 @app.route('/table', methods=['GET', 'POST'])
 def table():
+    if request.method == 'POST':
+        print("got post")
+        datax=session["surveyname"]
+        print(datax)
+        filenamex=download_csv(datax)
+        print(filenamex)
+        pathx="/download/"+filenamex
+        return(redirect(pathx))
     session['dat']=[]
     session['cols']=[]
     con = mysql.connect

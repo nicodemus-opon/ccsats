@@ -128,9 +128,10 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
-                    <h6 class="card-title"><button class="btn btn-primary subox btn-round">
-                      <i class="now-ui-icons ui-2_save-28"></i> Download Results
-                  </button> </h6>
+                    <form method="POST">
+                    <h6 class="card-title"><input type="submit" class="btn btn-primary subox btn-round" value="Download Results">
+                      <i class="now-ui-icons ui-2_save-28"></i> 
+                   </h6></form>
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
@@ -163,6 +164,8 @@
       <script>
         $('.subox').click(function () {
           var respo ="{{session.surveyname}}"
+          console.log(respo)
+          console.log("weeeee")
         $.ajax({
                 type: 'POST',
                 url: "{{ url_for('table') }}",
