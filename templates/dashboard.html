@@ -1,21 +1,16 @@
 {% extends 'layout.html' %} {% block body%}
-<body>
-    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-    <!-- CSS Files -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="static/assets/css/now-ui-dashboard.css?v=1.1.0" rel="stylesheet" />
+
+    
     <div class="wrapper ">
         <div class="sidebar" data-color="orange">
           <!--
             Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
         -->
           <div class="logo">
-            <a href="http://www.creative-tim.com" class="simple-text logo-minik">
+            <a href="/" class="simple-text logo-minik">
                 {{session["username"] | safe }}
             </a>
-            <a href="http://www.creative-tim.com" class="simple-text logo-normalj">
+            <a href="/" class="simple-text logo-normalj">
               
             </a>
           </div>
@@ -187,40 +182,10 @@
                 </div>
               </div>    
       <!--   Core JS Files   -->
-      <script src="static/assets/js/core/jquery.min.js"></script>
-      <script src="static/assets/js/core/popper.min.js"></script>
-      <script src="static/assets/js/core/bootstrap.min.js"></script>
-      <script src="static/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-      <!--  Google Maps Plugin    -->
-      <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-      <!-- Chart JS -->
-      <script src="static/assets/js/plugins/chartjs.min.js"></script>
-      <!--  Notifications Plugin    -->
-      <script src="static/assets/js/plugins/bootstrap-notify.js"></script>
-      <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-      <script src="static/assets/js/now-ui-dashboard.min.js?v=1.1.0" type="text/javascript"></script>
-      <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
-      <script src="static/assets/demo/demo.js"></script>
+      
 <script>
-  $('.subx').click(function () {
-          var respo =$('.xcd').find('option:selected').text();
-          console.log(respo)
-          console.log("weeeee")
-        $.ajax({
-                type: 'POST',
-                url: "{{ url_for('dashboard') }}",
-                contentType: 'application/json;charset=UTF-8',
-                //data : {'data':valuex},
-                data: JSON.stringify(respo),
-                //contentType: 'application/json',
-                success: function (data) {
-                    // do something with the received data
-                    window.location.href = "/dashboard/table";
-                }
-            });
-            window.location("/dashboard/table")
-    });
+ 
 </script>
-</body>
+
 
 {%endblock%}
