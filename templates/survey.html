@@ -7,8 +7,9 @@
 </style>
 
 <!--body class="login-page sidebar-collapse"-->
-<div class="page-headerx clear-filter text-dark" style="background-image:url(static/assets/img/bgk.jpg);background-position: center;background-size: cover;" filter-color="grey">
-        <div class="page-header-image" style="background-image:url()"></div>
+<div class="page-headerx clear-filter text-dark" style="background-image:url(static/assets/img/bgk.jpg);background-position: center;background-size: cover;"
+    filter-color="grey">
+    <div class="page-header-image" style="background-image:url()"></div>
     <div class="row">
         <div class="col-2">
         </div>
@@ -37,12 +38,12 @@
 
                 </div>
                 <!--div class="wrapper"-->
-                
-                    <ul class="content wrapv" id="wrapv" style="list-style-type: none;">
-                        {{session.htmlo | safe}}
-                        <!--html goes herereeee-->
-                    </ul>
-                
+
+                <ul class="content wrapv" id="wrapv" style="list-style-type: none;">
+                    {{session.htmlo | safe}}
+                    <!--html goes herereeee-->
+                </ul>
+
                 <!--/div-->
 
 
@@ -164,8 +165,12 @@
                     //var che = (this.checked ? $(this).val() : "");
                     //multi+=che+"-"
                 });
-                multi=multi.replace("--","-")
+                multi = multi.replace("--", "-")
                 multi = multi.substring(0, multi.length - 1);
+                var s = "0000test";
+                while (multi.charAt(0) === '-') {
+                    multi = multi.substr(1);
+                }
                 respo.push(multi);
             }
             if ($(this).children('#exampleFormControlSelect1').length > 0) {
@@ -175,16 +180,17 @@
         });
         console.log(respo);
         $.ajax({
-                type: 'POST',
-                url: "{{ url_for('survey') }}",
-                contentType: 'application/json;charset=UTF-8',
-                //data : {'data':valuex},
-                data: JSON.stringify(respo),
-                //contentType: 'application/json',
-                success: function (data) {
-                    // do something with the received data
-                }
-            });
+            type: 'POST',
+            url: "{{ url_for('survey') }}",
+            contentType: 'application/json;charset=UTF-8',
+            //data : {'data':valuex},
+            data: JSON.stringify(respo),
+            //contentType: 'application/json',
+            success: function (data) {
+                // do something with the received data
+                window.location.href = "/success";
+            }
+        });
     });
 
     $(".off").click(function () {

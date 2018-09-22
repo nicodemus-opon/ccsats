@@ -258,8 +258,11 @@
             console.log("drag on");
         });
         $("#savebutton").click(function () {
-            
-            var valuex = $('#titlex').val() + "*" + $('#headerx').val() + "*" + $('#namex').val() + "*" + $('.content').html() + "*" + $('.alert').length;
+            var named=$('#namex').val();
+            named=named.replace("  ", " ");
+            named=named.split(' ').join('-');
+            named=named.replace("/", "*");
+            var valuex = $('#titlex').val() + "*" + $('#headerx').val() + "*" + named + "*" + $('.content').html() + "*" + $('.alert').length;
             console.log(valuex);
             $(".closex").click();
             $.ajax({
@@ -271,6 +274,7 @@
                 //contentType: 'application/json',
                 success: function (data) {
                     // do something with the received data
+                    window.location.href = "/publish";
                 }
             });
             console.log("drag on");

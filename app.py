@@ -101,9 +101,9 @@ def dashboard():
         return (render_template('dashboard.html'))
 
 
-@app.route('/topics')
-def topics():
-    return (render_template('topics.html'))
+@app.route('/success')
+def success():
+    return (render_template('success.html'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -153,6 +153,8 @@ def parse_data():
         session["survey_name"]=survey_name
         session["ht"]=ht
         session["lent"]=lent
+        session["urlo"]=str(request.host_url)+"survey/"+str(session["survey_name"])
+        print(session["urlo"])
         print(session["title"])
         print(session["header"])
         print(session["survey_name"])
@@ -187,10 +189,11 @@ def parse_data():
 def download_csv(name):
     mystring=name
     hash_object = hashlib.md5(mystring.encode())
-    filex="static/downloads/"+str(hash_object.hexdigest())+".csv"
-    xc=str(hash_object.hexdigest())
+    #hash_object.hexdigest()
+    filex="static/downloads/"+str(session["surveyname"])+".csv"
+    xc=str(session["surveyname"])
     session["filex"]=filex
-    with open(filex, "w") as f:
+    with open(filex, "w",newline='') as f:
         writer = csv.writer(f)
         writer.writerows(session["mentions"])
     return(xc)
@@ -291,6 +294,11 @@ def logout():
 @app.route('/uh-oh')
 def uhoh():
     return render_template("uhoh.html")
+
+
+@app.route('/publish')
+def publish():
+    return render_template("publish.html")
 
 
 @app.route('/download/<string:filename>', methods=['GET', 'POST'])

@@ -1,0 +1,55 @@
+{% extends 'layout.html' %} {% block body%}
+<style>
+    .lookalive {
+
+        overflow: scroll;
+    }
+
+    .kio {
+        height: 200px;
+        width: 400px;
+
+
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        margin-top: -100px;
+        margin-left: -200px;
+    }
+</style>
+
+<!--body class="login-page sidebar-collapse"-->
+<div class="page-header clear-filter" filter-color="green">
+    <div class="page-header-image" style="background-image:url(static/assets/img/bg3.jpg)"></div>
+    <div class="kio">
+        <h1>SUCCESS ;)</h1>
+        <br></br>
+        <h2>You've successfully submitted the survey</h2>
+        <br></br>
+        <h5>
+        <a  href="/surveys" class="btn btn-round btn-link btn-neutral">View Other Surveys</a>
+        
+        <a  href="/" class="btn btn-neutral bg-transparent">Go Back home</a>
+        
+    </h5>
+    <br>
+        
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script src="static/assets/js/plugins/drag-sort.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+
+
+</script>
+
+<!--/body-->
+
+{%endblock%}
