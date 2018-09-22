@@ -136,8 +136,8 @@
                           <a class="nav-link btn active" href="/design">
                             <i class="material-icons" style="font-size: 40px">dvr</i>Design Survey</a>
                         </li>
-                        <li class="nav-item">
-                          <a class="nav-link btn" href="#">
+                        <li class="nav-item"data-toggle="modal" data-target="#modal1">
+                          <a class="nav-link btn" href="#" >
                             <i class="material-icons" style="font-size: 40px">assignment</i>View Results</a>
                         </li>
                         <li class="nav-item">
@@ -163,7 +163,29 @@
                 </div>
               </div>
               
-          
+              <div class="modal fade modal-mini modal-primary" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header justify-content-center">
+                      <div class="modal-profile">
+                        <i class="now-ui-icons users_circle-08"></i>
+                      </div>
+                    </div>
+                    <div class="modal-body">
+                      <p>Select the Survey to proceed</p>
+                      <select class="form-control xcd">
+                          {% for i in range(session["number_of_surveys"]) -%}
+                        <option>{{session["list_of_surveys"][i]}}</option>
+                        {%- endfor %}
+                      </select>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-link btn-neutral">Back</button>
+                      <button type="button" class="btn btn-link subx btn-neutral" data-dismiss="modal">Proceed</button>
+                    </div>
+                  </div>
+                </div>
+              </div>    
       <!--   Core JS Files   -->
       <script src="static/assets/js/core/jquery.min.js"></script>
       <script src="static/assets/js/core/popper.min.js"></script>
@@ -179,7 +201,25 @@
       <script src="static/assets/js/now-ui-dashboard.min.js?v=1.1.0" type="text/javascript"></script>
       <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
       <script src="static/assets/demo/demo.js"></script>
-
+<script>
+  $('.subx').click(function () {
+          var respo =$('.xcd').find('option:selected').text();
+          console.log(respo)
+          console.log("weeeee")
+        $.ajax({
+                type: 'POST',
+                url: "{{ url_for('dashboard') }}",
+                contentType: 'application/json;charset=UTF-8',
+                //data : {'data':valuex},
+                data: JSON.stringify(respo),
+                //contentType: 'application/json',
+                success: function (data) {
+                    // do something with the received data
+                }
+            });
+            window.location("/dashboard/table")
+    });
+</script>
 </body>
 
 {%endblock%}

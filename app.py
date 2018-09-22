@@ -83,8 +83,21 @@ def design():
 @is_logged_in
 def dashboard():
     if request.method == 'POST':
-        return (render_template('dashboard.html'))
+        session["surveyname"]=request.json
+        return (redirect(url_for("table")))
     else:
+        con = mysql.connect
+        cur = con.cursor()
+        cur.execute("SELECT nme FROM survey where usrname='"+str(session["username"])+"'")
+        list_of_surveys=[]
+        list_of_cols=[]
+        with con:
+            rows = cur.fetchall()
+            for row in rows:
+                list_of_surveys.append(str(row['nme']))
+        print(list_of_surveys)
+        session["list_of_surveys"]=list_of_surveys
+        session["number_of_surveys"]=len(list_of_surveys)
         return (render_template('dashboard.html'))
 
 
@@ -175,7 +188,7 @@ def download_csv(name):
     mystring=name
     hash_object = hashlib.md5(mystring.encode())
     filex="static/downloads/"+str(hash_object.hexdigest())+".csv"
-    xc=str(hash_object.hexdigest())+".csv"
+    xc=str(hash_object.hexdigest())
     session["filex"]=filex
     with open(filex, "w") as f:
         writer = csv.writer(f)
@@ -204,12 +217,16 @@ def table():
         rows = cur.fetchall()
         for row in rows:
             list_of_values.append(list(row.values()))
-
+    print("***********************")
+    print(list_of_values)
+    print("***********************")
+    if list_of_values==[]:
+        list_of_values=[['UH OH ;)'],['This Survey has not been filled']]
     for z in range(len(list_of_values[0])):
         e=z+1
         d="que-"+str(e)
         list_of_cols.append(d)
-
+    
     session["mentions"]=list_of_values
     session["cols"]=list_of_cols
     session["mentionsx"]=len(list_of_values)
@@ -271,9 +288,17 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/download/<path:filename>', methods=['GET', 'POST'])
+@app.route('/uh-oh')
+def uhoh():
+    return render_template("uhoh.html")
+
+
+@app.route('/download/<string:filename>', methods=['GET', 'POST'])
 def download(filename):
-    return send_from_directory(directory='static', filename=filename)
+    print("got download")
+    filename=filename+".csv"
+    print(filename)
+    return send_from_directory(directory='static/downloads', filename=filename, as_attachment=True)
 
 
 @app.route("/survey/<string:name>")
@@ -327,6 +352,17 @@ def handle_dash(name):
     if name=="table":
         return redirect(url_for("table"))
 
+
+@app.errorhandler(Exception)
+def handle_error(e):
+    print(e)
+    e=str(e)
+    session["error"]=e
+    return render_template("uhoh.html")
+    #code = 500
+    #if isinstance(e, HTTPException):
+    #    code = e.code
+    #return jsonify(error=str(e)), code
     
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0', port= 8090)
