@@ -374,7 +374,17 @@ def t(name):
 
 @app.route("/n/<string:name>")
 def n(name):
-    session["surveyname"]=str(name)
+    qe="delete from survey where nme='"+name+"'"
+    qu="drop table "+name
+    con = mysql.connect
+    cur = con.cursor()
+    cur.execute(qe)
+    con.commit()
+    con = mysql.connect
+    cur = con.cursor()
+    cur.execute(qu)
+    con.commit()
+    print("deleted")
     return redirect(url_for("mysurveys"))
 
 

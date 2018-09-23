@@ -22,7 +22,7 @@
       <div class="sidebar-wrapper">
         <ul class="nav">
           <li>
-            <a href="#">
+            <a href="/dashboard">
               <i class="now-ui-icons design_app"></i>
               <p>Home</p>
             </a>
@@ -160,7 +160,7 @@
                                 <td><a class="btn btn-dark btn-link" href="t/{{ session['snames'][i] }}">{{ session["snames"][i] }}</a></td>
                                 <td><a href="{{ session['sview'][i] }}" class="btn  btn-neutral">{{ session["sview"][i] }} </a></td>
                                 <td>{{ session["sresponses"][i] }}</td>
-                                <td><a href="{{ session['sdelete'][i] }}" class="btn btn-danger btn-round">Delete </a> </td>
+                                <td><a data-toggle="modal" data-target="#modal1" href="#" urlo="{{ session['sdelete'][i] }}" class="dex btn btn-danger btn-round">Delete </a> </td>
                             </tr>
                         {%- endfor %}
                     </tbody>
@@ -170,7 +170,23 @@
             </div>
           </div>
         </div>
-
+        <div class="modal fade modal-mini modal-primary" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header justify-content-center">
+                        
+                    </div>
+                    <div class="modal-body">
+                        <p class="warn"></p>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link btn-neutral">Back</button>
+                        <button type="button" class="delx btn btn-link subx btn-neutral" data-dismiss="modal">DELETE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <!--   Core JS Files   -->
         <script src="static/assets/js/core/jquery.min.js"></script>
@@ -197,21 +213,20 @@
                 });
               });
             });
-            $('.subox').click(function () {
-              var respo = "{{session.surveyname}}"
-              console.log(respo)
-              console.log("weeeee")
-              $.ajax({
-                type: 'POST',
-                url: "{{ url_for('table') }}",
-                contentType: 'application/json;charset=UTF-8',
-                //data : {'data':valuex},
-                data: JSON.stringify(respo),
-                //contentType: 'application/json',
-                success: function (data) {
-                  // do something with the received data
-                }
-              });
+            $('.dex').click(function () {
+              var respox = $(this).attr("urlo")
+              console.log(respox)
+              var cleanr=respox.split("/n/").join(" ")
+              var fullx="Are you sure that you want to delete the survey <b>"+cleanr+"</b>"
+              console.log(fullx)
+              $(".warn").html(fullx)
+              $(".warn").attr("ni",respox)
+            });
+            $('.delx').click(function () {
+                var zee = $(".warn").attr("ni")
+                console.log(zee)
+                window.location=zee;
+              
             });
           </script>
 </body>
