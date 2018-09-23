@@ -67,9 +67,44 @@ def process_login():
                     print("invalid creds")
     return render_template('index.html')
 
-@app.route('/pricing')
-def pricing():
-    return (render_template('pricing.html'))
+@app.route('/mysurveys')
+def mysurveys():
+    con = mysql.connect
+    cur = con.cursor()
+    cur.execute("SELECT nme FROM survey where usrname='"+str(session["username"])+"'")
+    list_of_surveysx=[]
+    list_of_respos=[]
+    list_of_urls=[]
+    list_of_dels=[]
+    with con:
+        rows = cur.fetchall()
+        for row in rows:
+            list_of_surveysx.append(str(row['nme']))
+            urls="/survey/"+str(row['nme'])
+            dels="/n/"+str(row['nme'])
+            list_of_dels.append(dels)
+            list_of_urls.append(urls)
+    session["snames"]=list_of_surveysx
+    session["lens"]=len(list_of_surveysx)
+    session["sview"]=list_of_urls
+    session["sdelete"]=list_of_dels
+    for x in list_of_surveysx:
+        con = mysql.connect
+        cur = con.cursor()
+        cur.execute("SELECT * FROM "+str(x))
+        with con:
+            rows = cur.fetchall()
+            vg=0
+            for row in rows:
+                vg+=1
+                #list_of_values.append(list(row.values()))
+        list_of_respos.append(vg)
+    session["sresponses"]=list_of_respos
+    print(session["snames"])
+    print(session["sview"])
+    print(session["sdelete"])
+    print(session["sresponses"])
+    return (render_template('mysurveys.html'))
 
 @app.route('/design', methods=['GET', 'POST'])
 @is_logged_in
@@ -330,6 +365,18 @@ def surve(name):
             session['heda']=row['header']
             session['htmlo']=xc
     return redirect(url_for("survey"))
+
+@app.route("/t/<string:name>")
+def t(name):
+    session["surveyname"]=str(name)
+    return redirect(url_for("table"))
+
+
+@app.route("/n/<string:name>")
+def n(name):
+    session["surveyname"]=str(name)
+    return redirect(url_for("mysurveys"))
+
 
 @app.route("/survey", methods=['GET', 'POST'])
 def survey():

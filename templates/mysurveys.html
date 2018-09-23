@@ -34,13 +34,13 @@
               <p>Notifications</p>
             </a>
           </li>
-          <li>
+          <li class="active">
             <a href="/mysurveys">
               <i class="now-ui-icons users_single-02"></i>
               <p>My Surveys</p>
             </a>
           </li>
-          <li class="active">
+          <li >
             <a href="#">
               <i class="now-ui-icons design_bullet-list-67"></i>
               <p>Tables and Graphs</p>
@@ -130,33 +130,39 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <form method="POST">
+                <!--form method="POST">
                   <h6 class="card-title">
                     <input type="submit" class="btn btn-primary subox btn-round" value="Download Results">
                     <i class="now-ui-icons ui-2_save-28"></i>
                   </h6>
-                </form>
+                </form-->
               </div>
               <div class="card-body">
                 <div class="table-responsive">
                   <table class="table" >
                     <thead class=" text-primary">
-                      {% for i in range(session["mentionsxy"]) -%}
                       <th>
-                        <b>{{session["cols"][i]}}</b>
+                        <b>Survey Name</b>
                       </th>
-                      {%- endfor %}
+                      <th>
+                        <b>URL </b>
+                      </th>
+                      <th>
+                        <b>Responses</b>
+                      </th>
+                      <th>
+                        <b> </b>
+                      </th>
                     </thead>
                     <tbody id='myTable'>
-                      {% for i in range(session["mentionsx"]) -%}
-                      <tr>
-                        {% for k in range(session["mentionsxy"]) -%}
-                        <td>
-                          {{session["mentions"][i][k]}}
-                        </td>
+                        {% for i in range(session["lens"]) -%}
+                            <tr>
+                                <td><a class="btn btn-dark btn-link" href="t/{{ session['snames'][i] }}">{{ session["snames"][i] }}</a></td>
+                                <td><a href="{{ session['sview'][i] }}" class="btn  btn-neutral">{{ session["sview"][i] }} </a></td>
+                                <td>{{ session["sresponses"][i] }}</td>
+                                <td><a href="{{ session['sdelete'][i] }}" class="btn btn-danger btn-round">Delete </a> </td>
+                            </tr>
                         {%- endfor %}
-                      </tr>
-                      {%- endfor %}
                     </tbody>
                   </table>
                 </div>
