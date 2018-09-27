@@ -5,7 +5,7 @@
         overflow: scroll;
     }
 
-    .kio {
+    .kiox {
         height: 200px;
         width: 400px;
 
@@ -21,20 +21,25 @@
 <!--body class="login-page sidebar-collapse"-->
 <div class="page-header clear-filter" filter-color="green">
     <div class="page-header-image" style="background-image:url(static/assets/img/bg6.jpg)"></div>
-    <div class="kio">
-        <h1>SUCCESS ;)</h1>
-        <br></br>
-        <h2>You've successfully Published the survey to <b>{{session["urlo"]}}</b></h2>
-        </br>
-        <h5>
-        <a  href="/survey/{{session['survey_name']}}" class="btn btn-round btn-link btn-neutral">View the Survey</a>
-        
-        <a  href="/dashboard" class="btn btn-neutral bg-transparent">Go Back to Dashboard</a>
-        
-    </h5>
-    <br>
-        
-    </div>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8"><div class="kio">
+            <h1>SUCCESS ;)</h1>
+            <br></br>
+            <h2>You've successfully Published the survey to <b>{{session["urlo"]}}</b></h2>
+            </br>
+            <h5>
+            <a  href="/survey/{{session['survey_name']}}" class="btn btn-round btn-link btn-neutral">View the Survey</a>
+            
+            <a  href="/dashboard" class="btn btn-neutral bg-transparent">Go Back to Dashboard</a>
+            
+        </h5>
+        <br>
+            
+        </div></div>
+        <div class="col-2"></div>
+      </div>
+    
 </div>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>

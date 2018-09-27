@@ -5,7 +5,7 @@
         overflow: scroll;
     }
 
-    .kio {
+    .kiox {
         height: 200px;
         width: 400px;
 
@@ -21,24 +21,26 @@
 <!--body class="login-page sidebar-collapse"-->
 <div class="page-header clear-filter" filter-color="orange">
     <div class="page-header-image" style="background-image:url(static/assets/img/bg4.jpg)"></div>
-    <div class="kio">
-        <h1>UH OH ;)</h1>
-        <br></br>
-        <h2>Something went wrong</h2>
-        <br></br>
-        <h5>
-        <a  href="/contact" class="btn btn-round btn-primary">Maybe Alert us</a>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8"><div class="kio">
+            <h1>UH OH :(</h1>
+            <br></br>
+            <h2>Something went wrong</h2>
+            <br></br>
+            <h5>
+            <a  href="/contact" class="btn btn-round btn-primary">Maybe Alert us</a>
+            
+            <a  href="/" class="btn btn-neutral bg-transparent">Go Back home</a>
+            <button type="button" class="btn btn-neutral bg-transparent" data-container="body" data-toggle="popover" data-placement="top" data-content="{{session['error']}}">
+                    More info . . .
+                  </button>
+        </h5>
         
-        <a  href="/" class="btn btn-neutral bg-transparent">Go Back home</a>
-        <button type="button" class="btn btn-neutral bg-transparent" data-container="body" data-toggle="popover" data-placement="top" data-content="{{session['error']}}">
-                More info . . .
-              </button>
-    </h5>
-    <br>
-        <button type="button" class="btn btn-neutral bg-transparent" data-container="body" data-toggle="popover" data-placement="top" data-content="{{session['error']}}">
-                More info . . .
-              </button>
-    </div>
+        </div></div>
+        <div class="col-2"></div>
+      </div>
+    
 </div>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
