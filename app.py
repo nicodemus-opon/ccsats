@@ -1,4 +1,5 @@
 import sqlite3
+import datetime
 import hashlib
 import csv
 import random
@@ -336,6 +337,30 @@ def publish():
     return render_template("publish.html")
 
 
+@app.route('/notification', methods=['GET', 'POST'])
+def notification():
+    if request.method=="POST":
+        print("removing notifications")
+        qe="delete from notifications"
+        con = mysql.connect
+        cur = con.cursor()
+        cur.execute(qe)
+        con.commit()
+        return redirect(url_for("notification"))
+    else:
+        con = mysql.connect
+        cur = con.cursor()
+        cur.execute("SELECT * FROM notifications")
+        list_of_vals=[]
+        with con:
+            rows = cur.fetchall()
+            for row in rows:
+                list_of_vals.append(row["story"])
+        session["alerts"]=list_of_vals
+        session["lenalerts"]=len(list_of_vals)
+        return render_template("notification.html")
+
+
 @app.route('/download/<string:filename>', methods=['GET', 'POST'])
 def download(filename):
     print("got download")
@@ -394,6 +419,9 @@ def survey():
         datax=request.json
         print(datax)
         print(datax[1])
+        timestr=str(datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y"))
+        fullstr="survey "+str(session['surveyname'])+" was filled at "+timestr
+        execstr="insert into notifications values('"+fullstr+"');"
         qstring=""
         for x in datax:
             qstring+="'"+x+"',"
@@ -404,6 +432,7 @@ def survey():
         con = mysql.connect
         cur = con.cursor()
         cur.execute(query)
+        cur.execute(execstr)
         con.commit()
         print("complete")
     return render_template("survey.html")
