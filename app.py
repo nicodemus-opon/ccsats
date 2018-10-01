@@ -1,5 +1,7 @@
 import sqlite3
 import datetime
+import zlib
+import zipfile
 import hashlib
 import csv
 import random
@@ -20,7 +22,6 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
 print("database initialized")
-
 #mysql.init_app(app)
 app.debug = True
 
@@ -122,6 +123,17 @@ def dashboard():
         session["surveyname"]=request.json
         return (redirect(url_for("table")))
     else:
+        con = mysql.connect
+        cur = con.cursor()
+        ds="SELECT * FROM notifications where usrname='"+session["username"]+"';"
+        cur.execute(ds)
+        list_of_vals=[]
+        with con:
+            rows = cur.fetchall()
+            for row in rows:
+                list_of_vals.append(row["alert"])
+        session["alerts"]=list_of_vals
+        session["lenalerts"]=len(list_of_vals)
         con = mysql.connect
         cur = con.cursor()
         cur.execute("SELECT nme FROM survey where usrname='"+str(session["username"])+"'")
@@ -336,6 +348,70 @@ def uhoh():
 def publish():
     return render_template("publish.html")
 
+def compress(file_names):
+    print("File Paths:")
+    print(file_names)
+
+    path = "/static/downloads/"
+    # Select the compression mode ZIP_DEFLATED for compression
+    # or zipfile.ZIP_STORED to just store the file
+    compression = zipfile.ZIP_DEFLATED
+
+    # create the zip file first parameter path/name, second mode
+    zf = zipfile.ZipFile("/static/downloads/RAWs.zip", mode="w")
+    try:
+        for file_name in file_names:
+            # Add file to the zip file
+            # first parameter file to zip, second filename in zip
+            zf.write(path + file_name, file_name, compress_type=compression)
+
+    except FileNotFoundError:
+        print("An error occurred")
+    finally:
+        # Don't forget to close the file!
+        zf.close()
+
+
+@app.route('/downloadall')
+def downloadall():
+    list_of_files=[]
+    for datax in session["list_of_surveys"]:
+        print("downloading...")
+        print(datax)
+        con = mysql.connect
+        cur = con.cursor()
+        cur.execute("SELECT * FROM "+str(datax))
+        list_of_values=[]
+        list_of_cols=[]
+        with con:
+            rows = cur.fetchall()
+            for row in rows:
+                list_of_values.append(list(row.values()))
+        #filenamex=download_csv(datax)
+        filex="static/downloads/"+str(datax)+".csv"
+        xc=str(datax)
+        session["filex"]=filex
+        with open(filex, "w",newline='') as f:
+            writer = csv.writer(f)
+            writer.writerows(list_of_values)
+        fij=str(datax)+".csv"
+        list_of_files.append(fij)
+        #print(filenamex)
+        #pathx="/download/"+filenamex
+        #print(pathx)
+        #return(redirect(pathx))
+    #compress(list_of_files)
+    fulldir="static/downloads/"+str(session["username"])+".zip"
+    filename=str(session["username"])+".zip"
+    with zipfile.ZipFile(fulldir, 'w') as zipMe:        
+        for file in list_of_files:
+            file="static/downloads/"+file
+            print(file)
+            zipMe.write(file, compress_type=zipfile.ZIP_DEFLATED)
+        
+    #return redirect(url_for("dashboard"))
+    return send_from_directory(directory='static/downloads', filename=filename, as_attachment=True)
+
 
 @app.route('/notification', methods=['GET', 'POST'])
 def notification():
@@ -350,12 +426,13 @@ def notification():
     else:
         con = mysql.connect
         cur = con.cursor()
-        cur.execute("SELECT * FROM notifications")
+        ds="SELECT * FROM notifications where usrname='"+session["username"]+"';"
+        cur.execute(ds)
         list_of_vals=[]
         with con:
             rows = cur.fetchall()
             for row in rows:
-                list_of_vals.append(row["story"])
+                list_of_vals.append(row["alert"])
         session["alerts"]=list_of_vals
         session["lenalerts"]=len(list_of_vals)
         return render_template("notification.html")
@@ -421,8 +498,18 @@ def survey():
         print(datax[1])
         timestr=str(datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y"))
         fullstr="survey "+str(session['surveyname'])+" was filled at "+timestr
-        execstr="insert into notifications values('"+fullstr+"');"
         qstring=""
+        #######
+        con = mysql.connect
+        cur = con.cursor()
+        cur.execute("select usrname from survey where nme='"+session["surveyname"]+"'")
+        usri=""
+        with con:
+            rows = cur.fetchall()
+            for row in rows:
+                usri+=str(row["usrname"])
+        #######
+        execstr="insert into notifications values('"+usri+"','"+ fullstr+"');"
         for x in datax:
             qstring+="'"+x+"',"
         qstring=qstring[:-1]
