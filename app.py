@@ -14,13 +14,15 @@ app = Flask(__name__)
 app.secret_key = "nico"
 #mysql = MySQL()
 print("initializing database")
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = "'123'"
-app.config['MYSQL_DB'] = 'ccsats'
-app.config['MYSQL_PORT'] = 3360
+app.config['MYSQL_USER'] = '2254517_ccsats' #'root'
+app.config['MYSQL_PASSWORD'] = 'abcdefgh12345'#"'123'"
+app.config['MYSQL_DB'] = '2254517_ccsats'#'ccsats'
+app.config['MYSQL_PORT'] = 3306
+app.config['MYSQL_DATABASE_HOST']='fdb12.125mb.com'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
+#con = mysql.connect
 print("database initialized")
 #mysql.init_app(app)
 app.debug = True
