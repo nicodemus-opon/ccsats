@@ -8,26 +8,27 @@ import random
 from flask import Flask, render_template, redirect, url_for, request, session, send_from_directory
 from functools import wraps
 from main import *
-from flask_mysqldb import MySQL
+#from flask_mysqldb import MySQL
+#from flaskext.mysql import MySQL
 
 app = Flask(__name__)
 app.secret_key = "nico"
 #mysql = MySQL()
 print("initializing database")
-app.config['MYSQL_USER'] = '2254517_ccsats' #'root'
-app.config['MYSQL_PASSWORD'] = 'abcdefgh12345'#"'123'"
-app.config['MYSQL_DB'] = '2254517_ccsats'#'ccsats'
+app.config['MYSQL_USER'] = 'sql9259727' #'root'
+app.config['MYSQL_PASSWORD'] = '7D7EWBCl1r'#"'123'"
+app.config['MYSQL_DB'] = 'sql9259727'#'ccsats'
 app.config['MYSQL_PORT'] = 3306
-app.config['MYSQL_DATABASE_HOST']='fdb12.125mb.com'
+app.config['MYSQL_DATABASE_HOST']='fsql9.freemysqlhosting.net'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
-mysql = MySQL(app)
-#con = mysql.connect
+#mysql = MySQL(app)
+#con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
 print("database initialized")
 #mysql.init_app(app)
 app.debug = True
-
-
+import pymysql as mysql
+import pymysql
 def is_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -49,7 +50,9 @@ def process_login():
         password = request.form['password']
         print(email)
         print(password)
-        con = mysql.connect
+        #con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
+        con= mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
+        #con=mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute("SELECT * FROM users")
         with con:
@@ -73,7 +76,7 @@ def process_login():
 
 @app.route('/mysurveys')
 def mysurveys():
-    con = mysql.connect
+    con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
     cur = con.cursor()
     cur.execute("SELECT nme FROM survey where usrname='"+str(session["username"])+"'")
     list_of_surveysx=[]
@@ -93,9 +96,9 @@ def mysurveys():
     session["sview"]=list_of_urls
     session["sdelete"]=list_of_dels
     for x in list_of_surveysx:
-        con = mysql.connect
+        con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
-        cur.execute("SELECT * FROM "+str(x))
+        cur.execute("SELECT * FROM "+str(x).lower())
         with con:
             rows = cur.fetchall()
             vg=0
@@ -125,7 +128,7 @@ def dashboard():
         session["surveyname"]=request.json
         return (redirect(url_for("table")))
     else:
-        con = mysql.connect
+        con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         ds="SELECT * FROM notifications where usrname='"+session["username"]+"';"
         cur.execute(ds)
@@ -136,7 +139,7 @@ def dashboard():
                 list_of_vals.append(row["alert"])
         session["alerts"]=list_of_vals
         session["lenalerts"]=len(list_of_vals)
-        con = mysql.connect
+        con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute("SELECT nme FROM survey where usrname='"+str(session["username"])+"'")
         list_of_surveys=[]
@@ -170,9 +173,9 @@ def register():
         que='''select * from users;'''
         quert='''insert into users values("'''+emailreg+'''","'''+passwordreg+'''");'''
         print(quert)
-        #cur = mysql.connection.cursor()
+        #cur = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)ion.cursor()
         #cur.execute(quert)
-        con = mysql.connect
+        con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute(quert)
         con.commit()
@@ -219,16 +222,16 @@ def parse_data():
         init_string=init_string[:-1]
         init_string+=");"
         print(init_string)
-        con = mysql.connect
+        con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute(init_string)
         con.commit()
         print("added table")
         quert='''insert into survey values("'''+session["survey_name"]+'''","'''+session["username"]+'''","''' + session["ht"]+'''","''' + session["title"]+'''","''' + session["header"]+'''");'''
         print(quert)
-        #cur = mysql.connection.cursor()
+        #cur = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)ion.cursor()
         #cur.execute(quert)
-        con = mysql.connect
+        con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute(quert)
         con.commit()
@@ -261,9 +264,9 @@ def table():
         return(redirect(pathx))
     session['dat']=[]
     session['cols']=[]
-    con = mysql.connect
+    con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
     cur = con.cursor()
-    cur.execute("SELECT * FROM "+str(session["surveyname"]))
+    cur.execute("SELECT * FROM "+str(session["surveyname"]).lower())
     list_of_values=[]
     list_of_cols=[]
     with con:
@@ -380,7 +383,7 @@ def downloadall():
     for datax in session["list_of_surveys"]:
         print("downloading...")
         print(datax)
-        con = mysql.connect
+        con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute("SELECT * FROM "+str(datax))
         list_of_values=[]
@@ -420,13 +423,13 @@ def notification():
     if request.method=="POST":
         print("removing notifications")
         qe="delete from notifications"
-        con = mysql.connect
+        con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute(qe)
         con.commit()
         return redirect(url_for("notification"))
     else:
-        con = mysql.connect
+        con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         ds="SELECT * FROM notifications where usrname='"+session["username"]+"';"
         cur.execute(ds)
@@ -452,7 +455,7 @@ def download(filename):
 def surve(name):
     session['surveyname']=name
     select_query="select * from survey where nme='"+str(name)+"' ;"
-    con = mysql.connect
+    con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
     cur = con.cursor()
     cur.execute(select_query)
     with con:
@@ -480,11 +483,11 @@ def t(name):
 def n(name):
     qe="delete from survey where nme='"+name+"'"
     qu="drop table "+name
-    con = mysql.connect
+    con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
     cur = con.cursor()
     cur.execute(qe)
     con.commit()
-    con = mysql.connect
+    con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
     cur = con.cursor()
     cur.execute(qu)
     con.commit()
@@ -502,7 +505,7 @@ def survey():
         fullstr="survey "+str(session['surveyname'])+" was filled at "+timestr
         qstring=""
         #######
-        con = mysql.connect
+        con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute("select usrname from survey where nme='"+session["surveyname"]+"'")
         usri=""
@@ -518,7 +521,7 @@ def survey():
         print(qstring)
         query="insert into "+str(session['surveyname'])+" values("+qstring+");"
         print(query)
-        con = mysql.connect
+        con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute(query)
         cur.execute(execstr)
