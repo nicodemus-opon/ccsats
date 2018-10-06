@@ -43,6 +43,10 @@ def is_logged_in(f):
 def index():
     return (render_template('index.html')) 
 
+@app.route('/test')
+def test():
+    return (render_template('test.html'))
+
 @app.route('/', methods=['POST','GET'])
 def process_login():
     if request.method == "POST":

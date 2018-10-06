@@ -1,11 +1,11 @@
 {% extends 'layout.html' %} {% block body%}
 <body class="">
-<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
     <!-- CSS Files -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="static/assets/css/now-ui-dashboard.css?v=1.1.0" rel="stylesheet" />
+    <link href="static/assets/css/now-ui-dashboard.css" rel="stylesheet" />
 
 <div class="wrapper ">
     <div class="sidebar" data-color="orange">
@@ -189,20 +189,6 @@
     </div>
 </div>
 <script src="static/assets/js/core/jquery.min.js"></script>
-      <script src="static/assets/js/core/popper.min.js"></script>
-      <script src="static/assets/js/core/bootstrap.min.js"></script>
-      <script src="static/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-      <!--  Google Maps Plugin    -->
-      <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-      <!-- Chart JS -->
-      <script src="static/assets/js/plugins/chartjs.min.js"></script>
-      <!--  Notifications Plugin    -->
-      <script src="static/assets/js/plugins/bootstrap-notify.js"></script>
-      <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-      <script src="static/assets/js/now-ui-dashboard.min.js?v=1.1.0" type="text/javascript"></script>
-      <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
-      <!--script src="static/assets/demo/demo.js"></script-->
-      <script src="static/assets/demo/demo.js"></script>
 <script>
     
     $('.subx').click(function () {
@@ -223,5 +209,20 @@
         });
         window.location("/dashboard/table")
     });
-</script> {%endblock%}
-</body>
+</script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!--   Core JS Files   -->
+<script src="static/assets/js/core/jquery.min.js"></script>
+<script src="static/assets/js/core/popper.min.js"></script>
+<script src="static/assets/js/core/bootstrap.min.js"></script>
+<script src="static/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<!--  Google Maps Plugin    -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<!-- Chart JS -->
+<script src="static/assets/js/plugins/chartjs.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="static/assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="static/assets/js/now-ui-dashboard.min.js?v=1.1.0" type="text/javascript"></script>
+<!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+<!--script src="static/assets/demo/demo.js"></script--> {%endblock%}
