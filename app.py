@@ -504,7 +504,7 @@ def survey():
     if request.method == 'POST':
         datax=request.json
         print(datax)
-        print(datax[1])
+        #print(datax[1])
         timestr=str(datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y"))
         fullstr="survey "+str(session['surveyname'])+" was filled at "+timestr
         qstring=""
