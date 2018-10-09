@@ -225,6 +225,7 @@ def parse_data():
             init_string+=textpend
         init_string=init_string[:-1]
         init_string+=");"
+        init_string=init_string.lower()
         print(init_string)
         con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
@@ -237,6 +238,7 @@ def parse_data():
         #cur.execute(quert)
         con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
+        quert=quert.lower()
         cur.execute(quert)
         con.commit()
         print("registered survey")
