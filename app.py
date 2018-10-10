@@ -4,10 +4,16 @@ import zlib
 import zipfile
 import hashlib
 import csv
+import os
 import random
 from flask import Flask, render_template, redirect, url_for, request, session, send_from_directory
 from functools import wraps
+import docx
+from docx.api import Document
+from werkzeug.utils import secure_filename
 from main import *
+UPLOAD_FOLDER = 'static/merge/'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'docx'])
 #from flask_mysqldb import MySQL
 #from flaskext.mysql import MySQL
 
@@ -21,7 +27,7 @@ app.config['MYSQL_DB'] = 'sql9259727'#'ccsats'
 app.config['MYSQL_PORT'] = 3306
 app.config['MYSQL_DATABASE_HOST']='fsql9.freemysqlhosting.net'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #mysql = MySQL(app)
 #con = mysql.connect("sql9.freemysqlhosting.net", "sql9259727", "7D7EWBCl1r", "sql9259727",cursorclass=pymysql.cursors.DictCursor)
 print("database initialized")
@@ -42,10 +48,81 @@ def is_logged_in(f):
 @app.route('/')
 def index():
     return (render_template('index.html')) 
+def read_table(docv):
+    document = Document(docv)
+    table = document.tables[1]
+    data = []
+    keys = None
+    for i, row in enumerate(table.rows):
+        text = (cell.text for cell in row.cells)
+        if i == 0:
+            keys = tuple(text)
+            continue
+        row_data = dict(zip(keys, text))
+        data.append(row_data)
+    return data
+
+    
+def merger(data,datax):
+    print(data)
+    print(datax)
+    data=read_table(data)
+    datax=read_table(datax)
+    list_of_meeting_title=[]
+    list_of_meeting_comments=[]
+    list_of_oral_title=[]
+    list_of_oral_comments=[]
+    for x in data:
+        list_of_meeting_title.append(x['title'])
+        list_of_meeting_comments.append(x['comments'])
+    for x in datax:
+        list_of_oral_title.append(x['title'])
+        list_of_oral_comments.append(x['comments'])
+    print(list_of_meeting_title)
+    documentx = Document("static/merge/start.docx")
+    documentx.add_page_break()
+    x=0
+    larger=[]
+    print(len(list_of_meeting_title))
+    print(len(list_of_oral_title))
+    
+    if len(list_of_meeting_title)>len(list_of_oral_title):
+        xc=len(list_of_meeting_title)
+        larger=list_of_meeting_title
+    else:
+        xc=len(list_of_oral_title)
+        larger=list_of_oral_title
+        
+    while x<xc:
+        documentx.add_heading(larger[x], level=1)
+        try:
+            ji=list_of_meeting_comments[x]
+            p = documentx.add_paragraph('\n')
+            p.add_run('Meeting\n').bold = True
+            p.add_run(list_of_meeting_comments[x])
+        except Exception as e:
+            print(e)
+            
+        try:
+            ji=list_of_oral_comments[x]
+            p = documentx.add_paragraph('\n')
+            p.add_run('Oral Presentation\n').bold = True
+            p.add_run(list_of_oral_comments[x])
+        except Exception as e:
+            print(e)
+        documentx.add_page_break()
+        x+=1
+    documentx.save('static/merge/report.docx')
+
 
 @app.route('/test')
 def test():
     return (render_template('test.html'))
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/', methods=['POST','GET'])
 def process_login():
@@ -355,9 +432,34 @@ def uhoh():
     return render_template("uhoh.html")
 
 
-@app.route('/publish')
-def publish():
-    return render_template("publish.html")
+@app.route('/merge', methods=['GET', 'POST'])
+def merge():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            print('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            print('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filename="meeting.docx"
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            xc=os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            
+        file = request.files['filex']
+        if file.filename == '':
+            print('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filename="oral.docx"
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            yc=os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            merger(xc,yc)
+            return send_from_directory(directory='static/merge', filename="report.docx", as_attachment=True)
+    return render_template("merge.html")
 
 def compress(file_names):
     print("File Paths:")

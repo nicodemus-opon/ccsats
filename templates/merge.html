@@ -1,0 +1,318 @@
+{% extends 'layout.html' %} {% block body%}
+
+<body class="login-page sidebar-collapse" style="background-image:url(static/bg.jpg)">
+    <!--div class="page-header clear-filter text-dark" filter-color="orange"-->
+    <div class="page-header-image" style="background-image:url(static/bg.jpg)"></div>
+    <div class="row">
+        <div class="col-sm">
+        </div>
+        <div class="col-lg" style="padding-top: 20px;">
+            <div class="card ">
+                <div class="card-header mt-2 text-center">
+                    Merge Documents
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        Add Documents then merge them into a single report
+                    </h4>
+                    <p class="card-text">
+
+                    </p>
+                    <form method="POST" enctype="multipart/form-data">
+                        <div id="upload_button">
+                            <label>
+                                <input id="selectedFile" type="file" name="file" ngf-select ng-model="new_files" ng-change="fs.uploadFiles(new_files)" multiple>
+                                <span id="fakeInput" class="btn btn-primary">Add Meeting Document</span>
+                            </label>
+                        </div>
+                        <div id="upload_button">
+                            <label>
+                                <input type="file" id="selectedFilex" name="filex" ngf-select ng-model="new_files" ng-change="fs.uploadFiles(new_files)" multiple>
+                                <span id="fakeInputx" class="btn btn-primary">Add Oral Presentation Document</span>
+                            </label>
+                        </div>
+                        <input class="btn btn-primary btn-outline btn-round" type="submit" value="Merge and Download">
+                        
+                </div>
+                </form>
+                <style>
+                    #upload_button {
+                        display: inline-block;
+                    }
+
+                    #upload_button input[type=file] {
+                        display: none;
+                    }
+                </style>
+                <div class="wrapper">
+                    <ul class="content wrap" id="wrap" style="list-style-type: none;">
+
+
+                        <!--div class="alert alert-light text-dark" role="alert">
+                                <div class="container">
+                                    <div class="alert-icon">
+                                        <i class="now-ui-icons ui-2_like"></i>
+                                    </div>
+                                    <strong>Design Survey!</strong> Click on add questions to add sections and Drag to arrange.
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">
+                                            <i class="now-ui-icons ui-1_simple-remove text-dark"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div-->
+                    </ul>
+                </div>
+
+
+                <div class="card-footer text-muted mb-2">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+        </div>
+    </div>
+    <!--/div-->
+    <!--simple question-->
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script src="static/assets/js/plugins/drag-sort.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $('#wrap').dragSort({
+            replaceStyle: {
+                'background-color': '#f96332',
+                'border': '1px dashed #ddd'
+            },
+            dragStyle: {
+                'position': 'fixed',
+                'box-shadow': '1px 1px 2px 0 #f96332'
+            }
+        });
+        $('.seq').click(function () {
+            console.log($(this).attr("id")); //IT WORKS!
+
+        });
+        $('#selectedFile').change(function () {
+    var a = $('#selectedFile').val().toString().split('\\');
+    console.log(a[2]);
+    console.log("ftt")
+    $('#fakeInput').html(a[a.length -1]);
+});
+$('#selectedFilex').change(function () {
+    var a = $('#selectedFilex').val().toString().split('\\');
+    console.log(a[2]);
+    console.log("ftt")
+    $('#fakeInputx').html(a[a.length -1]);
+});
+
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $.fn.changeElementType = function (newType) {
+            var newElements,
+                attrs,
+                newElement;
+
+            this.each(function () {
+                attrs = {};
+
+                $.each(this.attributes, function () {
+                    attrs[this.nodeName] = this.nodeValue;
+                });
+
+                newElement = $("<" + newType + "/>", attrs).append($(this).contents());
+
+                $(this).replaceWith(newElement);
+
+                if (!newElements) {
+                    newElements = newElement;
+                } else {
+                    $.merge(newElements, newElement);
+                }
+            });
+
+            return $(newElements);
+        };
+        $(".off").click(function () {
+            $(".content").attr("class", "content");
+            $(".content").attr("id", "noid");
+            $($('.wrapper').find('ul').get().reverse()).each(function () {
+                $(this).replaceWith($('<ol>' + $(this).html() + '</ol>'))
+            })
+            //$( "body" ).off("dragstart");
+            console.log("drag offf");
+        });
+        $(".on").click(function () {
+
+            $($('.wrapper').find('ol').get().reverse()).each(function () {
+                $(this).replaceWith($('<ul class="wrap content" id="wrap">' + $(this).html() + '</ul>'))
+            })
+            //$(".content").addClass("wrap")
+            //$(".content").attr("id", "wrap");
+            console.log("drag on");
+        });
+        $("#savebutton").click(function () {
+            var named = $('#namex').val();
+            named = named.replace("  ", " ");
+            named = named.split(' ').join('-');
+            named = named.replace("/", "*");
+            var valuex = $('#titlex').val() + "*" + $('#headerx').val() + "*" + named + "*" + $('.content').html() + "*" + $('.alert').length;
+            console.log(valuex);
+            $(".closex").click();
+            $.ajax({
+                type: 'POST',
+                url: "{{ url_for('parse_data') }}",
+                contentType: 'application/json;charset=UTF-8',
+                //data : {'data':valuex},
+                data: JSON.stringify(valuex),
+                //contentType: 'application/json',
+                success: function (data) {
+                    // do something with the received data
+                    window.location.href = "/publish";
+                }
+            });
+            console.log("drag on");
+        });
+        $(document).ready(
+            function () {
+                console.log("uiuiui");
+            })
+        $('#sqbutton').on('click', function () {
+            var txtValue = $('#sqtext').val();
+            console.log(txtValue);
+            $(".content").append(`<li><div class="alert alert-light text-dark" role="alert">
+
+                            <div class="containerx">
+                                
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">` + txtValue + `</label>
+                            <textarea class="form-control" id="" rows="1"></textarea>
+
+                        </div>
+
+                    
+                           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">
+                                        <i class="now-ui-icons ui-1_simple-remove text-dark"></i>
+                                    </span>
+                                </button>     
+                            </div>
+                        </div></li>`);
+        });
+        $('#schoice').on('click', function () {
+            var txtValue = $('#scquestion').val();
+            var choices = ""
+            var lines = $('#scchoices').val().split('\n');
+            for (var i = 0; i < lines.length; i++) {
+                choices += "<option>" + lines[i] + "</option>"
+            }
+
+            console.log(txtValue);
+            $(".content").append(`<li><div class="alert alert-light text-dark" role="alert">
+
+                            <div class="containerx">
+                               
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">` + txtValue + `</label>
+                            <select class="form-control" id="exampleFormControlSelect1">
+      ` + choices + `
+    </select>
+
+                        </div>
+
+                    
+                           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">
+                                        <i class="now-ui-icons ui-1_simple-remove text-dark"></i>
+                                    </span>
+                                </button>     
+                            </div>
+                        </div></li>`);
+        });
+        $('#mcbutton').on('click', function () {
+            var txtValue = $('#mcquestion').val();
+            var choices = ""
+            var lines = $('#mcchoices').val().split('\n');
+            for (var i = 0; i < lines.length; i++) {
+                choices += `<div class="form-check">
+								<label class="form-check-label">
+									<input class="form-check-input" type="checkbox" >
+									<span class="form-check-sign"></span>
+									` + lines[i] + `
+								</label>
+							</div>`
+            }
+
+            console.log(txtValue);
+            $(".content").append(`<li><div class="alert alert-light text-dark" role="alert">
+
+                            <div class="containerx">
+                                <form>
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">` + txtValue + `</label>
+                            <form class="form-control" id="exampleFormControlSelect1">
+      ` + choices + `
+    </form>
+
+                        </div>
+
+                    </form>
+                           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">
+                                        <i class="now-ui-icons ui-1_simple-remove text-dark"></i>
+                                    </span>
+                                </button>     
+                            </div>
+                        </div></li>`);
+        });
+
+    </script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!--   Core JS Files   -->
+    <script src="static/assets/js/core/jquery.min.js" type="text/javascript"></script>
+    <script src="static/assets/js/core/popper.min.js" type="text/javascript"></script>
+    <script src="static/assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+    <!--script type="text/javascript" src="{{ url_for('static', filename='assets/js/design.js') }}"></script-->
+    <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+    <script src="static/assets/js/plugins/bootstrap-switch.js"></script>
+
+    <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+    <script src="static/assets/js/plugins/nouislider.min.js" type="text/javascript"></script>
+    <script src="static/assets/js/main.js" type="text/javascript"></script>
+    <!--  Plugin for the DatePicker, full documentation here: https://github.com/uxsolutions/bootstrap-datepicker -->
+    <script src="static/assets/js/plugins/bootstrap-datepicker.js" type="text/javascript"></script>
+
+    <!--  Google Maps Plugin    -->
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script>
+
+    <script src="static/assets/js/core/jquery.min.js"></script>
+    <script src="static/assets/js/core/popper.min.js"></script>
+    <script src="static/assets/js/core/bootstrap.min.js"></script>
+    <script src="static/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+    <!--  Google Maps Plugin    -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+    <!-- Chart JS -->
+    <script src="static/assets/js/plugins/chartjs.min.js"></script>
+    <!--  Notifications Plugin    -->
+    <script src="static/assets/js/plugins/bootstrap-notify.js"></script>
+    <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="static/assets/js/now-ui-dashboard.min.js?v=1.1.0" type="text/javascript"></script>
+    <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+    <!--script src="static/assets/demo/demo.js"></script-->
+    <!--script src="static/assets/demo/demo.js"></script-->
+    <!-- Control Center for Now Ui Kit: parallax effects, scripts for the example pages etc -->
+    <script src="static/assets/js/now-ui-kit.min.js?v=1.2.0" type="text/javascript"></script>
+    <!-- Sharrre libray -->
+
+
+    <script src="static/assets/js/core/jquery.min.js" type="text/javascript"></script>
+    <script src="static/assets/js/core/popper.min.js" type="text/javascript"></script>
+    <script src="static/assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+</body>
+
+{%endblock%}
