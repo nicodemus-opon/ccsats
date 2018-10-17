@@ -55,63 +55,81 @@ def read_table(docv):
     keys = None
     for i, row in enumerate(table.rows):
         text = (cell.text for cell in row.cells)
+        keys=("number","title","comments","no")
+        '''
         if i == 0:
             keys = tuple(text)
-            continue
+            continue'''
         row_data = dict(zip(keys, text))
         data.append(row_data)
     return data
 
     
-def merger(data,datax):
-    print(data)
-    print(datax)
-    data=read_table(data)
-    datax=read_table(datax)
-    list_of_meeting_title=[]
-    list_of_meeting_comments=[]
-    list_of_oral_title=[]
-    list_of_oral_comments=[]
-    for x in data:
-        list_of_meeting_title.append(x['title'])
-        list_of_meeting_comments.append(x['comments'])
-    for x in datax:
-        list_of_oral_title.append(x['title'])
-        list_of_oral_comments.append(x['comments'])
-    print(list_of_meeting_title)
+def merger(docs=[]):
+    list_of_data=[]
+    list_of_names=[]
+    for z in docs:
+        name=z.split(".")
+        na=name[0]
+        k=na.split("static/merge/")
+        na=k[1]
+        list_of_names.append(na)
+    for x in docs:
+        list_of_data.append(read_table(x))
+
+##    print(list_of_names)
+##    print(list_of_data)
+##    return(0)
+        
     documentx = Document("static/merge/start.docx")
     documentx.add_page_break()
+    y=0
+    #print(list_of_data[0][0])
     x=0
-    larger=[]
-    print(len(list_of_meeting_title))
-    print(len(list_of_oral_title))
-    
-    if len(list_of_meeting_title)>len(list_of_oral_title):
-        xc=len(list_of_meeting_title)
-        larger=list_of_meeting_title
-    else:
-        xc=len(list_of_oral_title)
-        larger=list_of_oral_title
+    op=list_of_data
+    list_of_comments=[]
+    k=0
+    m=0
+    while True:
+        templist=[]
+        try:
+            for y in op[m]:
+                templist.append(y['comments'])
+            list_of_comments.append(templist)
+        except Exception as e:
+            break
+        m+=1
         
-    while x<xc:
-        documentx.add_heading(larger[x], level=1)
-        try:
-            ji=list_of_meeting_comments[x]
-            p = documentx.add_paragraph('\n')
-            p.add_run('Meeting\n').bold = True
-            p.add_run(list_of_meeting_comments[x])
-        except Exception as e:
-            print(e)
-            
-        try:
-            ji=list_of_oral_comments[x]
-            p = documentx.add_paragraph('\n')
-            p.add_run('Oral Presentation\n').bold = True
-            p.add_run(list_of_oral_comments[x])
-        except Exception as e:
-            print(e)
-        documentx.add_page_break()
-        x+=1
+    list_of_titles=[]
+    k=0
+    for x in op:
+        templist=[]
+        for y in op[0]:
+            templist.append(y['title'])
+        list_of_titles.append(templist)
+        k+=1
+        list_of_titles=list_of_titles[0]
+        break
+    post=0
+    for data in list_of_data:
+        com=0
+        for z in data[0]:
+            xc=len(data[0])
+            documentx.add_heading(list_of_titles[post], level=1)
+            post+=1
+            y=len(list_of_data)
+            x=0
+            #print(list_of_comments)
+            while x<len(list_of_data):
+                print(x,com)
+                head=list_of_names[x]+'\n'
+                p = documentx.add_paragraph('\n')
+                p.add_run(head).bold = True
+                p.add_run(list_of_comments[x][com])
+                x+=1
+            com+=1
+            documentx.add_page_break()
+        break
     documentx.save('static/merge/report.docx')
 
 
@@ -435,30 +453,26 @@ def uhoh():
 @app.route('/merge', methods=['GET', 'POST'])
 def merge():
     if request.method == 'POST':
-        if 'file' not in request.files:
+        '''if 'file' not in request.files:
             print('No file part')
             return redirect(request.url)
-        file = request.files['file']
+        
         if file.filename == '':
             print('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filename="meeting.docx"
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            xc=os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            
-        file = request.files['filex']
-        if file.filename == '':
-            print('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filename="oral.docx"
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            yc=os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            merger(xc,yc)
-            return send_from_directory(directory='static/merge', filename="report.docx", as_attachment=True)
+            return redirect(request.url)'''
+        filer = request.files.getlist('file')
+        list_of_file=[]
+        for file in filer:
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                #filename="meeting.docx"
+                
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                xc=os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                list_of_file.append(xc)
+        print(list_of_file)
+        merger(list_of_file)
+        return send_from_directory(directory='static/merge', filename="report.docx", as_attachment=True)
     return render_template("merge.html")
 
 def compress(file_names):

@@ -22,17 +22,12 @@
                         <div id="upload_button">
                             <label>
                                 <input id="selectedFile" type="file" name="file" ngf-select ng-model="new_files" ng-change="fs.uploadFiles(new_files)" multiple>
-                                <span id="fakeInput" class="btn btn-primary">Add Meeting Document</span>
+                                <span id="fakeInput" class="btn btn-primary">Add Documents (.docx)</span>
                             </label>
                         </div>
-                        <div id="upload_button">
-                            <label>
-                                <input type="file" id="selectedFilex" name="filex" ngf-select ng-model="new_files" ng-change="fs.uploadFiles(new_files)" multiple>
-                                <span id="fakeInputx" class="btn btn-primary">Add Oral Presentation Document</span>
-                            </label>
-                        </div>
+
                         <input class="btn btn-primary btn-outline btn-round" type="submit" value="Merge and Download">
-                        
+
                 </div>
                 </form>
                 <style>
@@ -45,7 +40,7 @@
                     }
                 </style>
                 <div class="wrapper">
-                    <ul class="content wrap" id="wrap" style="list-style-type: none;">
+                    <ul class="content wrap" id="wrap" style="list-style-type: none;padding-right:40px;">
 
 
                         <!--div class="alert alert-light text-dark" role="alert">
@@ -66,7 +61,7 @@
 
 
                 <div class="card-footer text-muted mb-2">
-
+                    <input type="text" id="fi" name="fi" style="visibility:hidden;" visbility="hidden" />
                 </div>
             </div>
         </div>
@@ -96,20 +91,38 @@
 
         });
         $('#selectedFile').change(function () {
-    var a = $('#selectedFile').val().toString().split('\\');
-    console.log(a[2]);
-    console.log("ftt")
-    $('#fakeInput').html(a[a.length -1]);
+            var a = $('#selectedFile').val().toString().split('\\');
+            //console.log(a[2]);
+            console.log($('#selectedFile').val().toString())
+            console.log("ftt")
+            //$('#fakeInput').html(a[a.length -1]);
+            var d = a[a.length - 1];
+
+
+            var kkk = $("#fi").val();
+            kkk = kkk + "?" + d;
+            $("#fi").val(kkk);
+            console.log("kkk");
+            console.log(kkk);
+            var files = $('#selectedFile').prop("files");
+            var names = $.map(files, function(val) { return val.name; });
+            console.log(names);
+            names.forEach(function(entry) {
+                $(".content").append(`<div class="alert alert-primary" style="" role="alert">` + entry + `
+   
+</div>`);
 });
-$('#selectedFilex').change(function () {
-    var a = $('#selectedFilex').val().toString().split('\\');
-    console.log(a[2]);
-    console.log("ftt")
-    $('#fakeInputx').html(a[a.length -1]);
-});
+
+        });
+        $('#selectedFilex').change(function () {
+            var a = $('#selectedFilex').val().toString().split('\\');
+            console.log($('#selectedFilex').val().toString())
+            //console.log(a[2]);
+            console.log("ftt")
+            $('#fakeInputx').html(a[a.length - 1]);
+        });
 
     </script>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
         $.fn.changeElementType = function (newType) {
@@ -180,6 +193,7 @@ $('#selectedFilex').change(function () {
         $(document).ready(
             function () {
                 console.log("uiuiui");
+                let fs=[];
             })
         $('#sqbutton').on('click', function () {
             var txtValue = $('#sqtext').val();
