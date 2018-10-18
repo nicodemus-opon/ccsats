@@ -107,6 +107,7 @@
             var files = $('#selectedFile').prop("files");
             var names = $.map(files, function(val) { return val.name; });
             console.log(names);
+            $(".content").html("");
             names.forEach(function(entry) {
                 $(".content").append(`<div class="alert alert-primary" style="" role="alert">` + entry + `
    

@@ -260,7 +260,7 @@
         $("#savebutton").click(function () {
             var named=$('#namex').val();
             named=named.replace("  ", " ");
-            named=named.split(' ').join('-');
+            named=named.split(' ').join('');
             named=named.replace("/", "*");
             var valuex = $('#titlex').val() + "*" + $('#headerx').val() + "*" + named + "*" + $('.content').html() + "*" + $('.alert').length;
             console.log(valuex);

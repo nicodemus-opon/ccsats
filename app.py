@@ -257,6 +257,9 @@ def dashboard():
 def success():
     return (render_template('success.html'))
 
+@app.route('/publish')
+def successv():
+    return (render_template('publish.html'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -327,18 +330,22 @@ def parse_data():
         cur.execute(init_string)
         con.commit()
         print("added table")
-        quert='''insert into survey values("'''+session["survey_name"]+'''","'''+session["username"]+'''","''' + session["ht"]+'''","''' + session["title"]+'''","''' + session["header"]+'''");'''
-        print(quert)
+        po=str(session["survey_name"])
+        po=po.lower()
+        quert='''insert into survey values("'''+po+'''","'''+session["username"]+'''","''' + session["ht"]+'''","''' + session["title"]+'''","''' + session["header"]+'''");'''
+        #print(quert)
         #cur = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)ion.cursor()
         #cur.execute(quert)
         con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
-        quert=quert.lower()
+        #quert=quert.lower()
         cur.execute(quert)
         con.commit()
         print("registered survey")
         redstring="/survey/"+session["survey_name"]
-        return(redirect(redstring))
+
+        redstring="/publish"
+        return(render_template("publish.html"))
 
 def download_csv(name):
     mystring=name
