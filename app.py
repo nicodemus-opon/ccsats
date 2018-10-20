@@ -247,6 +247,7 @@ def dashboard():
             rows = cur.fetchall()
             for row in rows:
                 list_of_surveys.append(str(row['nme']))
+                session["surveyname"]=row['nme']
         print(list_of_surveys)
         session["list_of_surveys"]=list_of_surveys
         session["number_of_surveys"]=len(list_of_surveys)
