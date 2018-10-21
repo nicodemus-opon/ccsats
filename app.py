@@ -243,6 +243,7 @@ def dashboard():
         cur.execute("SELECT nme FROM survey where usrname='"+str(session["username"])+"'")
         list_of_surveys=[]
         list_of_cols=[]
+        session["surveyname"]='empty'
         with con:
             rows = cur.fetchall()
             for row in rows:
