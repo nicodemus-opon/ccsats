@@ -29,10 +29,10 @@ app.config['MYSQL_DATABASE_HOST']='fsql9.freemysqlhosting.net'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #mysql = MySQL(app)
-#con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+#con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
 print("database initialized")
 #mysql.init_app(app)
-app.debug = True
+#app.debug = True
 import pymysql as mysql
 import pymysql
 def is_logged_in(f):
@@ -149,9 +149,9 @@ def process_login():
         password = request.form['password']
         print(email)
         print(password)
-        #con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
-        con= mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
-        #con=mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+        #con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
+        con= mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
+        #con=mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute("SELECT * FROM users")
         with con:
@@ -175,7 +175,7 @@ def process_login():
 
 @app.route('/mysurveys')
 def mysurveys():
-    con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+    con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
     cur = con.cursor()
     cur.execute("SELECT nme FROM survey where usrname='"+str(session["username"])+"'")
     list_of_surveysx=[]
@@ -195,7 +195,7 @@ def mysurveys():
     session["sview"]=list_of_urls
     session["sdelete"]=list_of_dels
     for x in list_of_surveysx:
-        con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+        con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute("SELECT * FROM "+str(x).lower())
         with con:
@@ -227,7 +227,7 @@ def dashboard():
         session["surveyname"]=request.json
         return (redirect(url_for("table")))
     else:
-        con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+        con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         ds="SELECT * FROM notifications where usrname='"+session["username"]+"';"
         cur.execute(ds)
@@ -238,7 +238,7 @@ def dashboard():
                 list_of_vals.append(row["alert"])
         session["alerts"]=list_of_vals
         session["lenalerts"]=len(list_of_vals)
-        con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+        con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute("SELECT nme FROM survey where usrname='"+str(session["username"])+"'")
         list_of_surveys=[]
@@ -277,9 +277,9 @@ def register():
         que='''select * from users;'''
         quert='''insert into users values("'''+emailreg+'''","'''+passwordreg+'''");'''
         print(quert)
-        #cur = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)ion.cursor()
+        #cur = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)ion.cursor()
         #cur.execute(quert)
-        con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+        con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute(quert)
         con.commit()
@@ -327,7 +327,7 @@ def parse_data():
         init_string+=");"
         init_string=init_string.lower()
         print(init_string)
-        con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+        con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute(init_string)
         con.commit()
@@ -336,9 +336,9 @@ def parse_data():
         po=po.lower()
         quert='''insert into survey values("'''+po+'''","'''+session["username"]+'''","''' + session["ht"]+'''","''' + session["title"]+'''","''' + session["header"]+'''");'''
         #print(quert)
-        #cur = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)ion.cursor()
+        #cur = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)ion.cursor()
         #cur.execute(quert)
-        con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+        con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         #quert=quert.lower()
         cur.execute(quert)
@@ -374,7 +374,7 @@ def table():
         return(redirect(pathx))
     session['dat']=[]
     session['cols']=[]
-    con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+    con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
     cur = con.cursor()
     cur.execute("SELECT * FROM "+str(session["surveyname"]).lower())
     list_of_values=[]
@@ -514,7 +514,7 @@ def downloadall():
     for datax in session["list_of_surveys"]:
         print("downloading...")
         print(datax)
-        con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+        con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute("SELECT * FROM "+str(datax))
         list_of_values=[]
@@ -554,13 +554,13 @@ def notification():
     if request.method=="POST":
         print("removing notifications")
         qe="delete from notifications"
-        con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+        con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute(qe)
         con.commit()
         return redirect(url_for("notification"))
     else:
-        con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+        con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         ds="SELECT * FROM notifications where usrname='"+session["username"]+"';"
         cur.execute(ds)
@@ -586,7 +586,7 @@ def download(filename):
 def surve(name):
     session['surveyname']=name
     select_query="select * from survey where nme='"+str(name)+"' ;"
-    con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+    con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
     cur = con.cursor()
     cur.execute(select_query)
     with con:
@@ -614,11 +614,11 @@ def t(name):
 def n(name):
     qe="delete from survey where nme='"+name+"'"
     qu="drop table "+name
-    con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+    con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
     cur = con.cursor()
     cur.execute(qe)
     con.commit()
-    con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+    con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
     cur = con.cursor()
     cur.execute(qu)
     con.commit()
@@ -636,7 +636,7 @@ def survey():
         fullstr="survey "+str(session['surveyname'])+" was filled at "+timestr
         qstring=""
         #######
-        con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+        con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute("select usrname from survey where nme='"+session["surveyname"]+"'")
         usri=""
@@ -652,7 +652,7 @@ def survey():
         print(qstring)
         query="insert into "+str(session['surveyname'])+" values("+qstring+");"
         print(query)
-        con = mysql.connect("db4free.net","ccsats","Ccsats11060!","ccsats",cursorclass=pymysql.cursors.DictCursor)
+        con = mysql.connect("remotemysql.com","WspVwlQTrP","ww548mYOPB","WspVwlQTrP",cursorclass=pymysql.cursors.DictCursor)
         cur = con.cursor()
         cur.execute(query)
         cur.execute(execstr)
@@ -682,4 +682,4 @@ def handle_error(e):
     #return jsonify(error=str(e)), code
     
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0', port= 8090)
+    app.run(host='0.0.0.0', port= 8090)
