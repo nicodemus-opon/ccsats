@@ -85,6 +85,11 @@
                                 </div>
                             </div>
                             <div class="card-body">
+							{% if error %}
+                        <div class="container">
+                        <p class="alert alert-danger" role="alert"><strong>Error:</strong> {{ error }}
+                        </div>
+                        {% endif %}
                                 <div class="input-group no-border input-lg">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
