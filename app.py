@@ -144,8 +144,8 @@ def allowed_file(filename):
 
 @app.route('/', methods=['POST','GET'])
 def process_login():
-    error=None
     if request.method == "POST":
+        error=None
         email = request.form['email']
         password = request.form['password']
         print(email)
