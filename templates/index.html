@@ -85,9 +85,9 @@
                                 </div>
                             </div>
                             <div class="card-body">
-							{% if session["error"]!="" %}
+							{% if session["error"] %}
                         <div class="container">
-                        <p class="alert alert-danger" role="alert"><strong>Error:</strong> {{ error }}
+                        <p class="alert alert-danger" role="alert"><strong>Error:</strong> {{ session["error"] }}
                         </div>
                         {% endif %}
                                 <div class="input-group no-border input-lg">

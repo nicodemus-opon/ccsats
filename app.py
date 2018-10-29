@@ -145,7 +145,7 @@ def allowed_file(filename):
 @app.route('/', methods=['POST','GET'])
 def process_login():
     if request.method == "POST":
-        error=None
+        error=""
         email = request.form['email']
         password = request.form['password']
         print(email)
@@ -169,11 +169,13 @@ def process_login():
                 if row['usrname']==email and row['passwrd']==password:
                     session["username"]=row['usrname']
                     session['logged_in']=True
+                    session.pop("error")
                     return redirect(url_for('dashboard'))
                 else:
                     print("invalid creds")
         error="Invalid Credentials !"
-        return render_template('index.html',error=error)
+        session["error"]=error
+        return render_template('index.html')
     return render_template('index.html')
 
 @app.route('/mysurveys')
@@ -268,7 +270,8 @@ def successv():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    error = None
+    error = ""
+    session.pop("error")
     if request.method == 'POST':
         print("get req")
         emailreg = request.form['emailreg']
