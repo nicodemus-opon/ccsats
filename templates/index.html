@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-							{% if error %}
+							{% if session["error"]!="" %}
                         <div class="container">
                         <p class="alert alert-danger" role="alert"><strong>Error:</strong> {{ error }}
                         </div>
