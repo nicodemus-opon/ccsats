@@ -56,8 +56,8 @@
 		                <!--        You can switch " data-color="orange" "  with one of the next bright colors: "blue", "green", "orange", "red", "azure"          -->
 
 		                    	<div class="wizard-header text-center">
-		                        	<h3 class="wizard-title">Create your profile</h3>
-									<p class="category">This information will let us know more about you.</p>
+		                        	<h3 class="wizard-title">Merge Documents</h3>
+									<p class="category">Setup wizard.</p>
 		                    	</div>
 
 								<div class="wizard-navigation">
@@ -94,7 +94,7 @@
 		                        <div class="tab-content">
 		                            <div class="tab-pane" id="about">
 		                            	<div class="row">
-											<h5 class="info-text"> Please tell us more about yourself.</h5>
+											<h5 class="info-text"> Basic info (Leave Blank to autogenerate).</h5>
 											<div class="col-sm-4 col-sm-offset-1">
 												<div class="picture-container">
 													<div class="picture">
@@ -150,49 +150,35 @@
                 </style></h5>
 		                                <div class="row">
 		                                    <div class="col-sm-8 col-sm-offset-2">
-		                                        
+		                                        <div class="wrapper">
+                    <ul class="content wrap" id="wrap" style="list-style-type: none;padding-right:40px;">
+
+
+                        <!--div class="alert alert-light text-dark" role="alert">
+                                <div class="container">
+                                    <div class="alert-icon">
+                                        <i class="now-ui-icons ui-2_like"></i>
+                                    </div>
+                                    <strong>Design Survey!</strong> Click on add questions to add sections and Drag to arrange.
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">
+                                            <i class="now-ui-icons ui-1_simple-remove text-dark"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div-->
+                    </ul>
+                </div>
 		                                    </div>
 		                                </div>
 		                            </div>
 		                            <div class="tab-pane" id="address">
 		                                <div class="row">
 		                                    <div class="col-sm-12">
-		                                        <h5 class="info-text"> Are you living in a nice area? </h5>
+		                                        <h5 class="info-text"> Finally ... </h5>
+												<input class="btn btn-danger btn-outline btn-round" type="submit" value="Merge and Download">
 		                                    </div>
-		                                    <div class="col-sm-7 col-sm-offset-1">
-		                                    	<div class="form-group">
-		                                            <label>Street Name</label>
-		                                            <input type="text" class="form-control" placeholder="5h Avenue">
-		                                        </div>
-		                                    </div>
-		                                    <div class="col-sm-3">
-		                                        <div class="form-group">
-		                                            <label>Street Number</label>
-		                                            <input type="text" class="form-control" placeholder="242">
-		                                        </div>
-		                                    </div>
-		                                    <div class="col-sm-5 col-sm-offset-1">
-		                                        <div class="form-group">
-		                                            <label>City</label>
-		                                            <input type="text" class="form-control" placeholder="New York...">
-		                                        </div>
-		                                    </div>
-		                                    <div class="col-sm-5">
-		                                        <div class="form-group">
-		                                            <label>Country</label><br>
-		                                            <select name="country" class="form-control">
-		                                                <option value="Afghanistan"> Afghanistan </option>
-		                                                <option value="Albania"> Albania </option>
-		                                                <option value="Algeria"> Algeria </option>
-		                                                <option value="American Samoa"> American Samoa </option>
-		                                                <option value="Andorra"> Andorra </option>
-		                                                <option value="Angola"> Angola </option>
-		                                                <option value="Anguilla"> Anguilla </option>
-		                                                <option value="Antarctica"> Antarctica </option>
-		                                                <option value="...">...</option>
-		                                            </select>
-		                                        </div>
-		                                    </div>
+		                                    
 		                                </div>
 		                            </div>
 		                        </div>
@@ -234,20 +220,7 @@
 	<!--  More information about jquery.validate here: http://jqueryvalidation.org/	 -->
 	<script src="static/assets/js/jquery.validate.min.js" type="text/javascript"></script>
     <script type="text/javascript">
-        $('#wrap').dragSort({
-            replaceStyle: {
-                'background-color': '#f96332',
-                'border': '1px dashed #ddd'
-            },
-            dragStyle: {
-                'position': 'fixed',
-                'box-shadow': '1px 1px 2px 0 #f96332'
-            }
-        });
-        $('.seq').click(function () {
-            console.log($(this).attr("id")); //IT WORKS!
 
-        });
         $('#selectedFile').change(function () {
             var a = $('#selectedFile').val().toString().split('\\');
             //console.log(a[2]);
@@ -267,19 +240,13 @@
             console.log(names);
             $(".content").html("");
             names.forEach(function(entry) {
-                $(".content").append(`<div class="alert alert-primary" style="" role="alert">` + entry + `
+                $(".content").append(`<div class="alert alert-danger" style="" role="alert">` + entry + `
    
 </div>`);
 });
 
         });
-        $('#selectedFilex').change(function () {
-            var a = $('#selectedFilex').val().toString().split('\\');
-            console.log($('#selectedFilex').val().toString())
-            //console.log(a[2]);
-            console.log("ftt")
-            $('#fakeInputx').html(a[a.length - 1]);
-        });
+
 
     </script>
 </html>
