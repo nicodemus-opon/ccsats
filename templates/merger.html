@@ -175,21 +175,14 @@
 		                            <div class="tab-pane" id="address">
 		                                <div class="row">
 		                                    <div class="col-sm-12">
-		                                        <h5 class="info-text"> Finally ... </h5>
+		                                        <h5 class="info-text"> Define Titles Then Merge </h5>
 												<input class="btn btn-danger btn-outline btn-round" type="submit" value="Merge and Download">
 												<div class="row">
 											<div class="col-2">
 											
 											</div>
-											<div class="col-8" style="padding:50px;">
-											
-  <div class="form-group">
-    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
-  </div>
-  <div class="form-group">
-    
-    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
-  </div>
+											<div class="col-8 hui" style="padding:50px;">
+
  
 											</div>
 											<div class="col-2">
@@ -259,10 +252,15 @@
             var names = $.map(files, function(val) { return val.name; });
             console.log(names);
             $(".content").html("");
+			$(".hui").html("");
             names.forEach(function(entry) {
                 $(".content").append(`<div class="alert alert-danger" style="" role="alert">` + entry + `
    
 </div>`);
+$(".hui").append(`  <div class="form-group">
+    
+    <input type="text" class="form-control" id="formGroupExampleInput2" value="`+entry+`">
+  </div>`);
 });
 
         });
