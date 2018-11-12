@@ -76,11 +76,6 @@ def merger(docs=[]):
         list_of_names.append(na)
     for x in docs:
         list_of_data.append(read_table(x))
-
-##    print(list_of_names)
-##    print(list_of_data)
-##    return(0)
-        
     documentx = Document("static/merge/start.docx")
     documentx.add_page_break()
     y=0
@@ -136,7 +131,12 @@ def merger(docs=[]):
 @app.route('/merger', methods=['POST','GET'])
 def test():
     if request.method == "POST":
-        pass
+        docies=request.form['docies']
+        namer=request.form['name']
+        date=request.form['date']
+        assesor=request.form['assesor']
+        docies=docies[:-1]
+        print(docies)
     return (render_template('merger.html'))
 
 def allowed_file(filename):
