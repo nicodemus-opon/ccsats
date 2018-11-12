@@ -133,8 +133,10 @@ def merger(docs=[]):
     documentx.save('static/merge/report.docx')
 
 
-@app.route('/merger')
+@app.route('/merger', methods=['POST','GET'])
 def test():
+    if request.method == "POST":
+        pass
     return (render_template('merger.html'))
 
 def allowed_file(filename):
@@ -295,7 +297,6 @@ def register():
         #rv = cur.fetchall()
         #print(rv)
         return (redirect(url_for('index')))
-
     return render_template('register.html')
 
 @app.route('/parse_data', methods=['GET', 'POST'])
