@@ -137,6 +137,24 @@ def test():
         assesor=request.form['assesor']
         docies=docies[:-1]
         print(docies)
+        filer = request.files.getlist('template')
+        print(str(filer))
+        print("huy")
+        for file in filer:
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                filename="template.docx"
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        filex = request.files.getlist('file')
+        list_of_file=[]
+        print(filex)
+        for file in filex:
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                xc=os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                list_of_file.append(xc)
+        print("done")
     return (render_template('merger.html'))
 
 def allowed_file(filename):
@@ -484,7 +502,6 @@ def merge():
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 #filename="meeting.docx"
-                
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 xc=os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 list_of_file.append(xc)

@@ -51,7 +51,7 @@
 					<!--      Wizard container        -->
 					<div class="wizard-container">
 						<div class="card wizard-card" data-color="red" id="wizardProfile">
-							<form action="" method="POST">
+							<form action="" method="POST" enctype="multipart/form-data">
 								<!--        You can switch " data-color="orange" "  with one of the next bright colors: "blue", "green", "orange", "red", "azure"          -->
 
 								<div class="wizard-header text-center">
@@ -127,7 +127,7 @@
 												<p class="card-text">
 
 												</p>
-												<form method="POST" enctype="multipart/form-data">
+												<!--form method="POST" enctype="multipart/form-data"-->
 													<div id="upload_button">
 														<label>
 															<input id="selectedFile" type="file" name="file" ngf-select ng-model="new_files" ng-change="fs.uploadFiles(new_files)"
@@ -136,7 +136,7 @@
 														</label>
 													</div>
 
-												</form>
+												<!--/form-->
 											</div>
 
 											<style>
