@@ -212,7 +212,7 @@ def merger(docs=[]):
                     documentx.add_page_break()
     p = documentx.add_paragraph()
     r = p.add_run()
-    r.add_picture('static/end.png', width=Inches(7.09), height=Inches(8.76))
+    r.add_picture('static/merge/end.png', width=Inches(7.09), height=Inches(8.76))
     documentx.save('static/merge/report.docx')
 
 
