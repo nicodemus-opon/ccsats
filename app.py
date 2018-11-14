@@ -3,9 +3,11 @@ import datetime
 import zlib
 import zipfile
 import hashlib
+import shutil
 import csv
 import os
 import random
+from docx.shared import Inches
 from flask import Flask, render_template, redirect, url_for, request, session, send_from_directory
 from functools import wraps
 import docx
@@ -47,84 +49,170 @@ def is_logged_in(f):
 
 @app.route('/')
 def index():
-    return (render_template('index.html')) 
+    return (render_template('index.html'))
+
+def namer(nm=""):
+    #replace name in fist page
+    replaceText = {"NAME" : nm}
+    # template directory
+    templateDocx = zipfile.ZipFile("static/merge/template.docx")
+    # final document
+    newDocx = zipfile.ZipFile("static/merge/nicopon.docx", "a") 
+    # temporary diectory
+    with open(templateDocx.extract("word/document.xml", "static/merge/")) as tempXmlFile:
+        tempXmlStr = tempXmlFile.read()
+    #print(tempXmlStr)
+    print(type(tempXmlStr))
+    for key in replaceText.keys():
+        tempXmlStr = tempXmlStr.replace(str(key), str(replaceText.get(key)))
+    with open("static/merge/temp.xml", "w+") as tempXmlFile:
+        tempXmlFile.write(tempXmlStr)
+
+    for file in templateDocx.filelist:
+        if not file.filename == "word/document.xml":
+            newDocx.writestr(file.filename, templateDocx.read(file))
+
+    newDocx.write("static/merge/temp.xml", "word/document.xml")
+
+    templateDocx.close()
+    newDocx.close()
+    ##################################################################
+    WORKING_DIR = os.getcwd()
+    TEMP_DOCX = os.path.join(WORKING_DIR, "static/merge/nicopon.docx")
+    TEMP_ZIP = os.path.join(WORKING_DIR, "static/merge/nicopon.zip")
+    TEMP_FOLDER = os.path.join(WORKING_DIR, "static/merge/nicopon")
+    if os.path.exists(TEMP_ZIP):
+        os.remove(TEMP_ZIP)
+    if os.path.exists(TEMP_FOLDER):
+        shutil.rmtree(TEMP_FOLDER)
+    os.rename(TEMP_DOCX, TEMP_ZIP)
+    with zipfile.ZipFile(TEMP_ZIP, 'r') as z:
+        z.extractall(TEMP_FOLDER)
+    x=1
+    while x<5:
+        names="header"+str(x)+".xml"
+        print(names)
+        header_xml = os.path.join(TEMP_FOLDER, "word", names)
+        try:
+            header_xml = os.path.join(TEMP_FOLDER, "word", names)
+            break
+        except Exception as e:
+            x+=1
+            print(e)
+    xmlstring = open(header_xml, 'r', encoding='utf-8').read()
+    xmlstring = xmlstring.replace("NAME", nm)
+    with open(header_xml, "wb") as f:
+        f.write(xmlstring.encode("UTF-8"))
+    os.remove(TEMP_ZIP)
+    shutil.make_archive(TEMP_ZIP.replace(".zip", ""), 'zip', TEMP_FOLDER)
+    os.rename(TEMP_ZIP, TEMP_DOCX)
+    shutil.rmtree(TEMP_FOLDER)
+
+
 def read_table(docv):
     document = Document(docv)
     table = document.tables[1]
+    table_info=document.tables[0]
     data = []
+    info=[]
     keys = None
+    for i, row in enumerate(table_info.rows):
+        text = [cell.text for cell in row.cells]
+        info.append(text)
+        
     for i, row in enumerate(table.rows):
         text = (cell.text for cell in row.cells)
-        keys=("number","title","comments","no")
-        '''
-        if i == 0:
-            keys = tuple(text)
-            continue'''
+        tr=[cell.text for cell in row.cells]
+        hu=len(tr)
+        if hu==4:
+            keys=("number","title","comments","no")
+        elif hu==3:
+            keys=("number","title","comments")
+        elif hu==2:
+            keys=("title","comments")    
         row_data = dict(zip(keys, text))
         data.append(row_data)
+    info=[info[0][1],info[0][3],info[1][1],info[1][3]]
+    namer(info[0])
+    session["inf"]=info
+    #info candidate,excercise,assesor,date  would be good if stored in sessions
     return data
 
-    
 def merger(docs=[]):
     list_of_data=[]
     list_of_names=[]
     for z in docs:
         name=z.split(".")
         na=name[0]
-        k=na.split("static/merge/")
-        na=k[1]
         list_of_names.append(na)
+    list_of_names=session["docies"]
     for x in docs:
         list_of_data.append(read_table(x))
-    documentx = Document("static/merge/start.docx")
+    documentx = Document("static/merge/nicopon.docx")
     documentx.add_page_break()
     y=0
-    #print(list_of_data[0][0])
     x=0
     op=list_of_data
     list_of_comments=[]
     k=0
     m=0
-    while True:
+    for x in range(len(op)):
         templist=[]
-        try:
-            for y in op[m]:
-                templist.append(y['comments'])
-            list_of_comments.append(templist)
-        except Exception as e:
-            break
-        m+=1
+        for y in op[x]:
+            kk=y['comments']
+            kk=str(kk).replace("+","")
+            kk=str(kk).replace("-","")
+            templist.append(kk)
+        list_of_comments.append(templist)
         
     list_of_titles=[]
-    k=0
-    for x in op:
+    for x in range(len(op)):
         templist=[]
-        for y in op[0]:
+        print(x)
+        for y in op[x]:
+            print(y['title'])
             templist.append(y['title'])
         list_of_titles.append(templist)
-        k+=1
-        list_of_titles=list_of_titles[0]
-        break
     post=0
-    for data in list_of_data:
-        com=0
-        for z in data[0]:
-            xc=len(data[0])
-            documentx.add_heading(list_of_titles[post], level=1)
-            post+=1
-            y=len(list_of_data)
-            x=0
-            #print(list_of_comments)
-            while x<len(list_of_data):
-                print(x,com)
-                head=list_of_names[x]+'\n'
-                p = documentx.add_paragraph('\n')
-                p.add_run(head).bold = True
-                p.add_run(list_of_comments[x][com])
-                x+=1
-            com+=1
-            documentx.add_page_break()
-        break
+    print(list_of_titles)
+    for x in range(len(list_of_titles)):
+        for y in range(len(list_of_titles[x])):
+            if x==0:
+                if list_of_titles[x][y] in list_of_titles[1]:
+                    nn=list_of_titles[x][y]
+                    ind=list_of_titles[x+1].index(nn)
+                    documentx.add_heading(list_of_titles[x][y], level=1)
+                    i=0
+                    while i<len(list_of_titles):
+                        head=list_of_names[i]+'\n'
+                        p = documentx.add_paragraph('\n')
+                        p.add_run(head).bold = True
+                        if i==0:
+                            p.add_run(list_of_comments[x][y])
+                        else:
+                            p.add_run(list_of_comments[x+1][ind])
+                        i+=1
+                    documentx.add_page_break()
+                else:
+                    documentx.add_heading(list_of_titles[x][y], level=1)
+                    head=list_of_names[x]+'\n'
+                    p = documentx.add_paragraph('\n')
+                    p.add_run(head).bold = True
+                    p.add_run(list_of_comments[x][y])
+                    documentx.add_page_break()
+            else:
+                if list_of_titles[x][y] in list_of_titles[0]:
+                    pass
+                else:
+                    documentx.add_heading(list_of_titles[x][y], level=1)
+                    head=list_of_names[x]+'\n'
+                    p = documentx.add_paragraph('\n')
+                    p.add_run(head).bold = True
+                    p.add_run(list_of_comments[x][y])
+                    documentx.add_page_break()
+    p = documentx.add_paragraph()
+    r = p.add_run()
+    r.add_picture('static/end.png', width=Inches(7.09), height=Inches(8.76))
     documentx.save('static/merge/report.docx')
 
 
@@ -137,6 +225,7 @@ def test():
         assesor=request.form['assesor']
         docies=docies[:-1]
         print(docies)
+        session["docies"]=docies.split(".")
         filer = request.files.getlist('template')
         print(str(filer))
         print("huy")
@@ -154,7 +243,20 @@ def test():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 xc=os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 list_of_file.append(xc)
-        print("done")
+        print("got all input")
+        merger(list_of_file)
+        cool_name=str(session["inf"][0])+" report.docx"
+        return send_from_directory(directory='static/merge', filename="report.docx", as_attachment=True,attachment_filename=cool_name)
+    folder = 'static/merge'
+    for the_file in os.listdir(folder):
+        file_path = os.path.join(folder, the_file)
+        try:
+            if os.path.isfile(file_path) and the_file!="template.docx":
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(e)
     return (render_template('merger.html'))
 
 def allowed_file(filename):
