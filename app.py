@@ -162,6 +162,8 @@ def merger(docs=[]):
             kk=y['comments']
             kk=str(kk).replace("+","")
             kk=str(kk).replace("-","")
+            kk=str(kk).replace("-/+","")
+            kk=str(kk).replace("+/-","")
             templist.append(kk)
         list_of_comments.append(templist)
         
