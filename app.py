@@ -251,7 +251,7 @@ def test():
     for the_file in os.listdir(folder):
         file_path = os.path.join(folder, the_file)
         try:
-            if os.path.isfile(file_path) and the_file!="template.docx" and the_file!="main.txt":
+            if os.path.isfile(file_path) and the_file!="template.docx" and the_file!="main.txt" and the_file.lower()!="end.png":
                 os.unlink(file_path)
             elif os.path.isdir(file_path):
                 shutil.rmtree(file_path)
