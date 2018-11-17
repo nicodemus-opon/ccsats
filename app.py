@@ -37,6 +37,45 @@ print("database initialized")
 app.debug = True
 import pymysql as mysql
 import pymysql
+def get_para_data(output_doc_name, paragraph,paro):
+    if paro==0:
+        output_doc_name.add_heading(paragraph.text)
+        return(0)
+    output_para = output_doc_name.add_paragraph()
+    for run in paragraph.runs:
+        output_run = output_para.add_run(run.text)
+        output_run.bold = run.bold
+        output_run.italic = run.italic
+        output_run.underline = run.underline
+        output_run.font.color.rgb = run.font.color.rgb
+        output_run.style.name = run.style.name
+    output_para.paragraph_format.alignment = paragraph.paragraph_format.alignment
+
+def finalizer(filed=[]):
+    files=["static/merge/planning and organising.docx","static/merge/customer service.docx","static/merge/leadership.docx","static/merge/commercial awareness.docx","static/merge/initiative.docx","static/merge/persuasive oral communication.docx"]
+    output_doc = Document("static/merge/nicopon.docx")
+    for file in filed:
+        if file in files:
+            pass
+        else:
+            files.append(file)
+    for index, file in enumerate(files):
+        try:
+            input_doc = Document(file)
+            paro=0
+            if index < len(files):
+                output_doc.add_page_break()
+            for para in input_doc.paragraphs:
+                get_para_data(output_doc, para,paro)
+                paro+=1
+        except Exception as e:
+            print("mhhh")
+            print(e)
+    p = output_doc.add_paragraph()
+    r = p.add_run()
+    r.add_picture('static/end.PNG', width=Inches(7.09), height=Inches(8.76))
+    output_doc.save('static/merge/report.docx')
+
 def is_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -148,8 +187,7 @@ def merger(docs=[]):
     list_of_names=session["docies"]
     for x in docs:
         list_of_data.append(read_table(x))
-    documentx = Document("static/merge/nicopon.docx")
-    documentx.add_page_break()
+    #documentx = Document("static/merge/nicopon.docx")
     y=0
     x=0
     op=list_of_data
@@ -162,8 +200,6 @@ def merger(docs=[]):
             kk=y['comments']
             kk=str(kk).replace("+","")
             kk=str(kk).replace("-","")
-            kk=str(kk).replace("-/+","")
-            kk=str(kk).replace("+/-","")
             templist.append(kk)
         list_of_comments.append(templist)
         
@@ -177,13 +213,22 @@ def merger(docs=[]):
         list_of_titles.append(templist)
     post=0
     print(list_of_titles)
+    #return(0)
+    list_of_filex=[]
     for x in range(len(list_of_titles)):
         for y in range(len(list_of_titles[x])):
             if x==0:
                 if list_of_titles[x][y] in list_of_titles[1]:
                     nn=list_of_titles[x][y]
                     ind=list_of_titles[x+1].index(nn)
-                    documentx.add_heading(list_of_titles[x][y], level=1)
+                    ti=list_of_titles[x][y]
+                    ti=ti.split("\n")
+                    ti=ti[0]
+                    titi="static/merge/"+str(ti)+".docx"
+                    titi=titi.lower()
+                    list_of_filex.append(titi)
+                    documentx = Document()
+                    documentx.add_heading(list_of_titles[x][y])
                     i=0
                     while i<len(list_of_titles):
                         head=list_of_names[i]+'\n'
@@ -194,28 +239,41 @@ def merger(docs=[]):
                         else:
                             p.add_run(list_of_comments[x+1][ind])
                         i+=1
-                    documentx.add_page_break()
+                    documentx.save(titi)
                 else:
-                    documentx.add_heading(list_of_titles[x][y], level=1)
+                    ti=list_of_titles[x][y]
+                    ti=ti.split("\n")
+                    ti=ti[0]
+                    titi="static/merge/"+ti+".docx"
+                    titi=titi.lower()
+                    list_of_filex.append(titi)
+                    documentx = Document()
+                    documentx.add_heading(list_of_titles[x][y])
                     head=list_of_names[x]+'\n'
                     p = documentx.add_paragraph('\n')
                     p.add_run(head).bold = True
                     p.add_run(list_of_comments[x][y])
-                    documentx.add_page_break()
+                    documentx.save(titi)
             else:
                 if list_of_titles[x][y] in list_of_titles[0]:
                     pass
                 else:
-                    documentx.add_heading(list_of_titles[x][y], level=1)
+                    ti=list_of_titles[x][y]
+                    ti=ti.split("\n")
+                    ti=ti[0]
+                    titi="static/merge/"+str(ti)+".docx"
+                    titi=titi.lower()
+                    list_of_filex.append(titi)
+                    documentx = Document()
+                    documentx.add_heading(list_of_titles[x][y])
                     head=list_of_names[x]+'\n'
                     p = documentx.add_paragraph('\n')
                     p.add_run(head).bold = True
                     p.add_run(list_of_comments[x][y])
-                    documentx.add_page_break()
-    p = documentx.add_paragraph()
-    r = p.add_run()
-    r.add_picture('static/end.PNG', width=Inches(7.09), height=Inches(8.76))
-    documentx.save('static/merge/report.docx')
+                    documentx.save(titi)
+    print("kkk")
+    print(list_of_filex)
+    finalizer(list_of_filex)
 
 
 @app.route('/merger', methods=['POST','GET'])
