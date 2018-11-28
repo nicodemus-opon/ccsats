@@ -93,6 +93,7 @@
 									<div class="tab-pane" id="about">
 										<div class="row">
 											<h5 class="info-text"> Basic info (Leave text fields Blank to autogenerate).</h5>
+											<div class="uploade" style="padding-left:40px;padding-right:40px;"></div>
 											<div class="col-sm-4 col-sm-offset-1">
 												<div class="picture-container">
 													<div class="picture">
@@ -189,6 +190,13 @@
 
 													</div>
 												</div>
+												<div class="" style="padding-left:50px;padding-right:50px;">
+												<h7 class="info-text"> Select Order </h7>
+												<select class="form-control" name="order">
+  <option>Current</option>
+  <option>Reversed</option>
+</select>
+</div>
 											</div>
 
 										</div>
@@ -231,6 +239,7 @@
 
 <!--  More information about jquery.validate here: http://jqueryvalidation.org/	 -->
 <script src="static/assets/js/jquery.validate.min.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 	$(".mm").click(function(){
 		var respo = [];
@@ -272,6 +281,30 @@ $("document").ready(function(){
     
     <input type="text" id="kiki" class="form-control kiki"  placeholder="`+ entry + `" required>
   </div>`);
+		});
+
+	});
+	$('#wizard-picture').change(function () {
+		var a = $('#wizard-picture').val().toString().split('\\');
+		//console.log(a[2]);
+		console.log($('#wizard-picture').val().toString())
+		console.log("ftt")
+		//$('#fakeInput').html(a[a.length -1]);
+		var d = a[a.length - 1];
+		var kkk = $("#fi").val();
+		kkk = kkk + "?" + d;
+		$("#fi").val(kkk);
+		console.log("kkk");
+		console.log(kkk);
+		var files = $('#wizard-picture').prop("files");
+		var names = $.map(files, function (val) { return val.name; });
+		console.log(names);
+		$(".content").html("");
+		$(".uploade").html(""); 
+		names.forEach(function (entry) {
+			$(".uploade").append(`<div class="alert alert-success" role="alert"> Successfully uploaded template ` + entry + `
+</div>`);
+			
 		});
 
 	});

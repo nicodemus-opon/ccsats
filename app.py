@@ -18,6 +18,7 @@ UPLOAD_FOLDER = 'static/merge/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'docx'])
 #from flask_mysqldb import MySQL
 #from flaskext.mysql import MySQL
+from docx.shared import Pt
 
 app = Flask(__name__)
 app.secret_key = "nico"
@@ -38,16 +39,20 @@ app.debug = True
 import pymysql as mysql
 import pymysql
 def get_para_data(output_doc_name, paragraph,paro):
+    style = output_doc_name.styles['Normal']
+    font = style.font
+    font.name = 'Trebuchet MS'
     if paro==0:
         output_doc_name.add_heading(paragraph.text)
         return(0)
     output_para = output_doc_name.add_paragraph()
+    output_para.styles=output_doc_name.styles['Normal']
     for run in paragraph.runs:
         output_run = output_para.add_run(run.text)
         output_run.bold = run.bold
         output_run.italic = run.italic
         output_run.underline = run.underline
-        output_run.font.color.rgb = run.font.color.rgb
+        #output_run.font.color.rgb = run.font.color.rgb
         output_run.style.name = run.style.name
     output_para.paragraph_format.alignment = paragraph.paragraph_format.alignment
 
@@ -283,6 +288,7 @@ def test():
         namer=request.form['name']
         date=request.form['date']
         assesor=request.form['assesor']
+        order=request.form['order']
         docies=docies[:-1]
         print(docies)
         session["docies"]=docies.split(".")
@@ -304,6 +310,14 @@ def test():
                 xc=os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 list_of_file.append(xc)
         print("got all input")
+        if order=="Reversed":
+            print("reversin")
+            print(type(list_of_file))
+            print(len(list_of_file))
+            print(list_of_file[1])
+            list_of_file.reverse()
+            session["docies"].reverse()
+            print(list_of_file[0])
         merger(list_of_file)
         cool_name=str(session["inf"][0])+" report.docx"
         return send_from_directory(directory='static/merge', filename="report.docx", as_attachment=True,attachment_filename=cool_name)
